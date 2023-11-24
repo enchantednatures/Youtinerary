@@ -1,0 +1,33 @@
+[package]
+name = "youtinerary"
+version = "0.1.0"
+edition = "2021"
+
+[profile.dev]
+opt-level = 1
+[profile.dev.package."*"]
+opt-level = 3
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.wasm-release]
+inherits = "release"
+opt-level = 'z'
+lto = true
+codegen-units = 1
+
+[dependencies]
+leptos = { version = "0.5.2", features = ["csr", "nightly"] }
+leptos-use = { version = "0.8.2", features = ["serde", "serde_json", "storage"] }
+leptos_router = { version = "0.5.2", features = ["csr", "nightly"] }
+serde = { version = "1.0.193", features = ["derive"] }
+log = "0.4"
+
+
+wasm-bindgen = { version = "0.2" }
+console_log = { version = "1"}
+console_error_panic_hook = { version = "0.1"}
+uuid = { version = "1.6.1", features = ["serde", "v4"] }
+leptos_meta = { version = "0.5.2", features = ["csr", "nightly"] }
+gloo-net = "0.4.0"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+tracing = "0.1.40"
