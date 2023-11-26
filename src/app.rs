@@ -24,6 +24,8 @@ mod state;
 
 use state::GlobalState;
 use state::GlobalStateSignal;
+use components::ShowItnerarySignal;
+use components::CreateItinerarySlideOut;
 
 pub type ShowCommandPalletSignal = RwSignal<bool>;
 
@@ -36,9 +38,11 @@ pub fn is_logged_in() -> bool {
 pub fn App() -> impl IntoView {
     provide_meta_context();
     let show_command_pallet: ShowCommandPalletSignal = create_rw_signal(false);
+    let show_itinerary: ShowItnerarySignal = create_rw_signal(false);
     let state: GlobalStateSignal = create_rw_signal(GlobalState::default());
     provide_context(state);
     provide_context(show_command_pallet);
+    provide_context(show_itinerary);
 
     // let _ = use_event_listener(use_window(), keydown, |evt| {
     //     console_log(format!("window keydown: '{}'", evt.key()).as_str());
@@ -82,7 +86,7 @@ pub fn App() -> impl IntoView {
                         </AnimatedShow>
                         <Routes>
                             <Route path="/" view=Home>
-                                <Route path="create" view=CreateItineraryForm/>
+                                <Route path="create" view=CreateItinerarySlideOut/>
                                 <Route path="new_itinerary" view=CreateItineraryForm/>
                             </Route>
                             <Route path="/about" view=About/>
