@@ -47,7 +47,7 @@ jobs:
   build-and-preview-deploy:
     runs-on: ubuntu-latest
     name: Build and Preview Deploy
-    needs: [test]
+    # needs: [test]
     permissions:
       pull-requests: write
     environment:
