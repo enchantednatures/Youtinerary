@@ -68,7 +68,7 @@ jobs:
         run: |
            curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-arm64
            chmod +x tailwindcss-linux-arm64
-           mv tailwindcss-linux-arm64 tailwindcss
+           mv tailwindcss-linux-arm64 /usr/bin/tailwindcss
       - name: Build
         run: |
           cargo build --verbose
