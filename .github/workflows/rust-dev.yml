@@ -64,10 +64,11 @@ jobs:
       - uses: dtolnay/rust-toolchain@nightly
       - uses: Swatinem/rust-cache@v2
       - uses: jetli/trunk-action@v0.4.0
-
-      - curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-arm64
-      - chmod +x tailwindcss-linux-arm64
-      - mv tailwindcss-linux-arm64 tailwindcss
+      - name: Install Tailwind
+        run: |
+           curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-arm64
+           chmod +x tailwindcss-linux-arm64
+           mv tailwindcss-linux-arm64 tailwindcss
       - name: Build
         run: |
           cargo build --verbose
