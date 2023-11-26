@@ -58,7 +58,7 @@ pub fn CommandPallet() -> impl IntoView {
         }
     });
 
-    let new_itinerary_action: fn(MouseEvent) -> _ = |me| create_new_itinerary_action(me);
+    let new_itinerary_action: fn(MouseEvent) -> _ = create_new_itinerary_action;
 
     let about_action: fn(MouseEvent) -> _ = |_| {
         let show_command_pallet: ShowCommandPalletSignal =
