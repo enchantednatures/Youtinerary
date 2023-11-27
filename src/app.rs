@@ -18,16 +18,16 @@ mod header;
 use header::Header;
 use icons::LogoIcon;
 
-use components::CreateItineraryForm;
-
 mod state;
 
+use components::CreateItinerarySlideOut;
+use components::ShowItinerarySignal;
 use state::GlobalState;
 use state::GlobalStateSignal;
-use components::ShowItnerarySignal;
-use components::CreateItinerarySlideOut;
 
-pub type ShowCommandPalletSignal = RwSignal<bool>;
+use command_pallet::ShowCommandPalletSignal;
+
+use crate::app::command_pallet::CommandPallet;
 
 pub fn is_logged_in() -> bool {
     let state = expect_context::<GlobalStateSignal>();
@@ -37,21 +37,13 @@ pub fn is_logged_in() -> bool {
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-    let show_command_pallet: ShowCommandPalletSignal = create_rw_signal(false);
-    let show_itinerary: ShowItnerarySignal = create_rw_signal(false);
-    let state: GlobalStateSignal = create_rw_signal(GlobalState::default());
+    let show_command_pallet = create_rw_signal(false);
+    let show_itinerary = create_rw_signal(false);
+    let state = create_rw_signal(GlobalState::default());
+
     provide_context(state);
-    provide_context(show_command_pallet);
-    provide_context(show_itinerary);
-
-    // let _ = use_event_listener(use_window(), keydown, |evt| {
-    //     console_log(format!("window keydown: '{}'", evt.key()).as_str());
-    // });
-
-    // let eh = leptos::ev::EventHandler::new()
-    //     .on_keydown(|evt| {
-    //         console_log(format!("window keydown: '{}'", evt.key()).as_str());
-    //     });
+    provide_context(ShowItinerarySignal::new(show_itinerary));
+    provide_context(ShowCommandPalletSignal::new(show_command_pallet.write_only()));
 
     view! {
         <Title formatter=|text| format!("{text} — Youtinerary")/>
@@ -82,13 +74,23 @@ pub fn App() -> impl IntoView {
                             // the given unmount delay which should match your unmount animation duration
                             hide_delay=Duration::from_millis(300)
                         >
-                            <command_pallet::CommandPallet></command_pallet::CommandPallet>
+                            <CommandPallet/>
+                        </AnimatedShow>
+
+                        <AnimatedShow
+                            when=show_itinerary
+                            // optional CSS class which will be applied if `when == true`
+                            show_class="ease-out duration-900 opacity-100"
+                            // optional CSS class which will be applied if `when == false` and before the
+                            // `hide_delay` starts -> makes CSS unmount animations really easy
+                            hide_class="ease-in duration-300 opacity-0"
+                            // the given unmount delay which should match your unmount animation duration
+                            hide_delay=Duration::from_millis(300)
+                        >
+                            <CreateItinerarySlideOut/>
                         </AnimatedShow>
                         <Routes>
-                            <Route path="/" view=Home>
-                                <Route path="create" view=CreateItinerarySlideOut/>
-                                <Route path="new_itinerary" view=CreateItineraryForm/>
-                            </Route>
+                            <Route path="/" view=Home/>
                             <Route path="/about" view=About/>
                             <Route path="/login" view=Login/>
                             <Route path="/logout" view=LogOut/>

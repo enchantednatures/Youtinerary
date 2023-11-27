@@ -1,3 +1,4 @@
+use chrono::Utc;
 use leptos::*;
 
 mod inputs;
@@ -6,6 +7,7 @@ use inputs::NewItineraryNameInput;
 
 #[component]
 pub fn CreateItineraryForm() -> impl IntoView {
+    let today = Utc::now().date_naive().format("%Y-%m-%d").to_string();
     view! {
         <form class="space-y-8 divide-y divide-gray-200">
             <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
@@ -15,6 +17,7 @@ pub fn CreateItineraryForm() -> impl IntoView {
                             <div class="isolate -space-y-px rounded-md shadow-sm">
                                 <NewItineraryNameInput/>
                                 <BudgetInput/>
+                                <input type="date" class="w-full" value=&today min=&today/>
                             </div>
                         </div>
                     </div>

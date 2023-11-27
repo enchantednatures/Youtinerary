@@ -1,5 +1,7 @@
 use leptos::RwSignal;
 
+use super::components::Itineraries;
+
 #[derive(Clone, Debug, Default)]
 pub struct LoggedInUser {
     pub email: String,
@@ -11,6 +13,7 @@ pub struct LoggedInUser {
 #[derive(Clone, Debug, Default)]
 pub struct GlobalState {
     pub user: Option<LoggedInUser>,
+    pub itineraries: Itineraries,
 }
 
 pub type GlobalStateSignal = RwSignal<GlobalState>;

@@ -6,7 +6,22 @@ use leptos_router::{use_navigate, NavigateOptions};
 use leptos_use::{use_element_hover_with_options, UseElementHoverOptions};
 use web_sys::MouseEvent;
 
-use crate::app::ShowCommandPalletSignal;
+use super::components::ShowItinerarySignal;
+
+
+#[derive(Debug, Clone, Copy)]
+pub struct ShowCommandPalletSignal( WriteSignal<bool>);
+
+
+impl ShowCommandPalletSignal {
+    pub fn new(signal: WriteSignal<bool>) -> Self {
+        Self(signal)
+    }
+
+    pub fn set(&self, value: bool) {
+        self.0.set(value);
+    }
+}
 
 #[component]
 pub fn Command(id: usize, value: String, on_click: fn(MouseEvent) -> ()) -> impl IntoView {
@@ -39,8 +54,8 @@ fn create_new_itinerary_action(_me: MouseEvent) {
     let show_command_pallet: ShowCommandPalletSignal =
         use_context().expect("Command pallet signal not provided");
     console_log("clicked new itinerary");
-    let navigation = use_navigate();
-    navigation("/new_itinerary", NavigateOptions::default());
+    let show_iternary = expect_context::<ShowItinerarySignal>();
+    show_iternary.set(true);
     show_command_pallet.set(false);
 }
 
@@ -48,8 +63,8 @@ fn create_new_itinerary_action(_me: MouseEvent) {
 pub fn CommandPallet() -> impl IntoView {
     // let (commands, set_commands) = create_signal(vec![]);
     let (user_input, set_user_input) = create_signal(String::new());
-    let show_command_pallet: ShowCommandPalletSignal =
-        use_context().expect("Command pallet signal not provided");
+    let show_command_pallet =expect_context::<ShowCommandPalletSignal>();
+        // use_context().expect("Command pallet signal not provided");
     let input_ref = create_node_ref::<Input>();
 
     create_effect(move |_| {

@@ -1,31 +1,172 @@
-use leptos::*;
+use chrono::{NaiveDate, Utc};
+use leptos::{html::Input, leptos_dom::logging::console_log, *};
+use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
-pub type ShowItnerarySignal = RwSignal<bool>;
+use crate::app::{components::DatePicker, state::GlobalStateSignal};
+
+const STORAGE_KEY: &str = "youtinerary-itineraries";
+
+#[derive(Debug, Clone)]
+pub struct Itineraries(Vec<Itinerary>);
+
+impl Default for Itineraries {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+impl Itineraries {
+    pub fn new() -> Self {
+        let itineraries_from_storage =
+            window()
+                .local_storage()
+                .ok()
+                .flatten()
+                .and_then(|storage| {
+                    storage
+                        .get_item(STORAGE_KEY)
+                        .ok()
+                        .flatten()
+                        .and_then(|value| serde_json::from_str::<Vec<Itinerary>>(&value).ok())
+                })
+                .unwrap_or_default();
+        Self(itineraries_from_storage)
+    }
+
+    pub fn add(&mut self, itinerary: Itinerary) {
+        let storage = window()
+            .local_storage()
+            .expect("couldn't get localStorage")
+            .unwrap();
+        self.0.push(itinerary);
+        let json = serde_json::to_string(&self.0).expect("couldn't serialize Todos");
+        if storage.set_item(STORAGE_KEY, &json).is_err() {
+            log::error!("error while trying to set item in localStorage");
+        }
+    }
+
+    pub fn get(&self) -> &[Itinerary] {
+        self.0.as_slice()
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Itinerary {
+    pub name: String,
+    pub description: String,
+    pub start_date: NaiveDate,
+    pub end_date: NaiveDate,
+}
+
+impl Itinerary {
+    pub fn new(
+        name: String,
+        description: String,
+        start_date: NaiveDate,
+        end_date: NaiveDate,
+    ) -> Self {
+        Self {
+            name,
+            description,
+            start_date,
+            end_date,
+        }
+    }
+}
+
+impl From<CreateItieraryRequest> for Itinerary {
+    fn from(request: CreateItieraryRequest) -> Self {
+        Self::new(request.name.get(), request.description.get(), request.start_date.get(), request.end_date.get())
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateItieraryRequest {
+    pub name: RwSignal<String>,
+    pub description: RwSignal<String>,
+    pub start_date: RwSignal<NaiveDate>,
+    pub end_date: RwSignal<NaiveDate>,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct ShowItinerarySignal(RwSignal<bool>);
+
+impl ShowItinerarySignal {
+    pub fn new(signal: RwSignal<bool>) -> Self {
+        Self(signal)
+    }
+
+    pub fn set(&self, value: bool) {
+        self.0.set(value);
+    }
+
+    pub fn read_only(&self) -> ReadSignal<bool> {
+        self.0.read_only()
+    }
+}
 
 #[component]
 pub fn CreateItinerarySlideOut() -> impl IntoView {
-    let show: ShowItnerarySignal = use_context().expect("Command pallet signal not provided");
-    show.set(true);
-    view! {
-        <div
-            class="relative z-10"
-            aria-labelledby="slide-over-title"
-            role="dialog"
-            aria-modal="true"
-        >
-            <AnimatedShow
-                when=show
-                show_class="fade-in-1000"
-                hide_class="fade-out-1000"
-                hide_delay=Duration::from_millis(1000)
-            >
+    let show: ShowItinerarySignal = expect_context::<ShowItinerarySignal>();
+    let global_state = expect_context::<GlobalStateSignal>();
 
+    let name_signal = create_rw_signal("".to_string());
+    let description_signal = create_rw_signal("".to_string());
+
+    let selected_date = create_rw_signal(Utc::now().naive_utc().date());
+    let selected_end_date = create_rw_signal(Utc::now().naive_utc().date());
+
+    let itnerary_signal = create_rw_signal(CreateItieraryRequest {
+        name: name_signal,
+        description: description_signal,
+        start_date: selected_date,
+        end_date: selected_end_date,
+    });
+
+    create_effect(move |_| {
+        if let Ok(Some(storage)) = window().local_storage() {
+            let json = serde_json::to_string(&global_state.get().itineraries.get())
+                .expect("couldn't serialize Todos");
+            if storage.set_item(STORAGE_KEY, &json).is_err() {
+                log::error!("error while trying to set item in localStorage");
+            }
+        }
+    });
+
+    let slide_target = create_node_ref::<Input>();
+
+    create_effect(move |_| {
+        if let Some(input) = slide_target.get() {
+            let _ = input.focus();
+        }
+    });
+
+    let (button_is_disabled, _) =
+        create_signal(move || name_signal.get().is_empty() || description_signal.get().is_empty());
+
+
+
+    view! {
+        <AnimatedShow
+            when=show.read_only()
+            show_class="fade-in-1000"
+            hide_class="fade-out-1000"
+            hide_delay=Duration::from_millis(1000)
+        >
+            <div
+                class="relative z-50"
+                aria-labelledby="slide-over-title"
+                role="dialog"
+                aria-modal="true"
+            >
                 <div class="fixed inset-0 overflow-hidden">
                     <div class="absolute inset-0 overflow-hidden">
                         <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
                             <div class="pointer-events-auto w-screen max-w-2xl">
-                                <form class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                                <form
+                                    class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl"
+                                    on:submit=|ev| ev.prevent_default()
+                                >
                                     <div class="flex-1">
                                         <div class="bg-gray-50 px-4 py-6 sm:px-6">
                                             <div class="flex items-start justify-between space-x-3">
@@ -34,16 +175,17 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                                                         class="text-base font-semibold leading-6 text-gray-900"
                                                         id="slide-over-title"
                                                     >
-                                                        New project
+                                                        New itinerary
                                                     </h2>
                                                     <p class="text-sm text-gray-500">
-                                                        Get started by filling in the information below to create your new project.
+                                                        Get started by filling in the information below to create your new itinerary.
                                                     </p>
                                                 </div>
                                                 <div class="flex h-7 items-center">
                                                     <button
                                                         type="button"
                                                         class="relative text-gray-400 hover:text-gray-500"
+                                                        on:click=move |_| show.set(false)
                                                     >
                                                         <span class="absolute -inset-2.5"></span>
                                                         <span class="sr-only">Close panel</span>
@@ -70,26 +212,33 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                                             <div class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                 <div>
                                                     <label
-                                                        for="project-name"
+                                                        for="itinerary-name"
                                                         class="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
                                                     >
-                                                        Project name
+                                                        Itinerary name
                                                     </label>
                                                 </div>
                                                 <div class="sm:col-span-2">
                                                     <input
                                                         type="text"
-                                                        name="project-name"
-                                                        id="project-name"
+                                                        node_ref=slide_target
+                                                        name="itinerary-name"
+                                                        id="itinerary-name"
                                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        autofocus=true
+                                                        on:input=move |ev| {
+                                                            name_signal.set(event_target_value(&ev));
+                                                            console_log(&name_signal.get());
+                                                        }
                                                     />
+
                                                 </div>
                                             </div>
 
                                             <div class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                 <div>
                                                     <label
-                                                        for="project-description"
+                                                        for="itinerary-description"
                                                         class="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
                                                     >
                                                         Description
@@ -97,212 +246,35 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                                                 </div>
                                                 <div class="sm:col-span-2">
                                                     <textarea
-                                                        id="project-description"
-                                                        name="project-description"
+                                                        id="itinerary-description"
+                                                        name="itinerary-description"
                                                         rows="3"
                                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                    ></textarea>
+                                                        on:input=move |ev| {
+                                                            description_signal.set(event_target_value(&ev));
+                                                            console_log(&description_signal.get());
+                                                        }
+                                                    >
+                                                    </textarea>
                                                 </div>
                                             </div>
 
-                                            <div class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
+                                            <div class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                                 <div>
-                                                    <h3 class="text-sm font-medium leading-6 text-gray-900">
-                                                        Team Members
-                                                    </h3>
+                                                    <label
+                                                        for="itinerary-dates"
+                                                        class="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
+                                                    >
+                                                        Date Range
+                                                    </label>
                                                 </div>
                                                 <div class="sm:col-span-2">
-                                                    <div class="flex space-x-2">
-                                                        <a
-                                                            href="#"
-                                                            class="flex-shrink-0 rounded-full hover:opacity-75"
-                                                        >
-                                                            <img
-                                                                class="inline-block h-8 w-8 rounded-full"
-                                                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                                alt="Tom Cook"
-                                                            />
-                                                        </a>
-                                                        <a
-                                                            href="#"
-                                                            class="flex-shrink-0 rounded-full hover:opacity-75"
-                                                        >
-                                                            <img
-                                                                class="inline-block h-8 w-8 rounded-full"
-                                                                src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                                alt="Whitney Francis"
-                                                            />
-                                                        </a>
-                                                        <a
-                                                            href="#"
-                                                            class="flex-shrink-0 rounded-full hover:opacity-75"
-                                                        >
-                                                            <img
-                                                                class="inline-block h-8 w-8 rounded-full"
-                                                                src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                                alt="Leonard Krasner"
-                                                            />
-                                                        </a>
-                                                        <a
-                                                            href="#"
-                                                            class="flex-shrink-0 rounded-full hover:opacity-75"
-                                                        >
-                                                            <img
-                                                                class="inline-block h-8 w-8 rounded-full"
-                                                                src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                                alt="Floyd Miles"
-                                                            />
-                                                        </a>
-                                                        <a
-                                                            href="#"
-                                                            class="flex-shrink-0 rounded-full hover:opacity-75"
-                                                        >
-                                                            <img
-                                                                class="inline-block h-8 w-8 rounded-full"
-                                                                src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                                                alt="Emily Selman"
-                                                            />
-                                                        </a>
-
-                                                        <button
-                                                            type="button"
-                                                            class="relative inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-dashed border-gray-200 bg-white text-gray-400 hover:border-gray-300 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                                                        >
-                                                            <span class="absolute -inset-2"></span>
-                                                            <span class="sr-only">Add team member</span>
-                                                            <svg
-                                                                class="h-5 w-5"
-                                                                viewBox="0 0 20 20"
-                                                                fill="currentColor"
-                                                                aria-hidden="true"
-                                                            >
-                                                                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"></path>
-                                                            </svg>
-                                                        </button>
-                                                    </div>
+                                                    <DatePicker
+                                                        selected_date=selected_date
+                                                        selected_end_date=selected_end_date
+                                                    />
                                                 </div>
                                             </div>
-
-                                            <fieldset class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
-                                                <legend class="sr-only">Privacy</legend>
-                                                <div
-                                                    class="text-sm font-medium leading-6 text-gray-900"
-                                                    aria-hidden="true"
-                                                >
-                                                    Privacy
-                                                </div>
-                                                <div class="space-y-5 sm:col-span-2">
-                                                    <div class="space-y-5 sm:mt-0">
-                                                        <div class="relative flex items-start">
-                                                            <div class="absolute flex h-6 items-center">
-                                                                <input
-                                                                    id="public-access"
-                                                                    name="privacy"
-                                                                    aria-describedby="public-access-description"
-                                                                    type="radio"
-                                                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                                    checked
-                                                                />
-                                                            </div>
-                                                            <div class="pl-7 text-sm leading-6">
-                                                                <label
-                                                                    for="public-access"
-                                                                    class="font-medium text-gray-900"
-                                                                >
-                                                                    Public access
-                                                                </label>
-                                                                <p id="public-access-description" class="text-gray-500">
-                                                                    Everyone with the link will see this project
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="relative flex items-start">
-                                                            <div class="absolute flex h-6 items-center">
-                                                                <input
-                                                                    id="restricted-access"
-                                                                    name="privacy"
-                                                                    aria-describedby="restricted-access-description"
-                                                                    type="radio"
-                                                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                                />
-                                                            </div>
-                                                            <div class="pl-7 text-sm leading-6">
-                                                                <label
-                                                                    for="restricted-access"
-                                                                    class="font-medium text-gray-900"
-                                                                >
-                                                                    Private to Project Members
-                                                                </label>
-                                                                <p id="restricted-access-description" class="text-gray-500">
-                                                                    Only members of this project would be able to access
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="relative flex items-start">
-                                                            <div class="absolute flex h-6 items-center">
-                                                                <input
-                                                                    id="private-access"
-                                                                    name="privacy"
-                                                                    aria-describedby="private-access-description"
-                                                                    type="radio"
-                                                                    class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                                                                />
-                                                            </div>
-                                                            <div class="pl-7 text-sm leading-6">
-                                                                <label
-                                                                    for="private-access"
-                                                                    class="font-medium text-gray-900"
-                                                                >
-                                                                    Private to you
-                                                                </label>
-                                                                <p id="private-access-description" class="text-gray-500">
-                                                                    You are the only one able to access this project
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr class="border-gray-200"/>
-                                                    <div class="flex flex-col items-start space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                                                        <div>
-                                                            <a
-                                                                href="#"
-                                                                class="group flex items-center space-x-2.5 text-sm font-medium text-indigo-600 hover:text-indigo-900"
-                                                            >
-                                                                <svg
-                                                                    class="h-5 w-5 text-indigo-500 group-hover:text-indigo-900"
-                                                                    viewBox="0 0 20 20"
-                                                                    fill="currentColor"
-                                                                    aria-hidden="true"
-                                                                >
-                                                                    <path d="M12.232 4.232a2.5 2.5 0 013.536 3.536l-1.225 1.224a.75.75 0 001.061 1.06l1.224-1.224a4 4 0 00-5.656-5.656l-3 3a4 4 0 00.225 5.865.75.75 0 00.977-1.138 2.5 2.5 0 01-.142-3.667l3-3z"></path>
-                                                                    <path d="M11.603 7.963a.75.75 0 00-.977 1.138 2.5 2.5 0 01.142 3.667l-3 3a2.5 2.5 0 01-3.536-3.536l1.225-1.224a.75.75 0 00-1.061-1.06l-1.224 1.224a4 4 0 105.656 5.656l3-3a4 4 0 00-.225-5.865z"></path>
-                                                                </svg>
-                                                                <span>Copy link</span>
-                                                            </a>
-                                                        </div>
-                                                        <div>
-                                                            <a
-                                                                href="#"
-                                                                class="group flex items-center space-x-2.5 text-sm text-gray-500 hover:text-gray-900"
-                                                            >
-                                                                <svg
-                                                                    class="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                                                                    viewBox="0 0 20 20"
-                                                                    fill="currentColor"
-                                                                    aria-hidden="true"
-                                                                >
-                                                                    <path
-                                                                        fill-rule="evenodd"
-                                                                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM8.94 6.94a.75.75 0 11-1.061-1.061 3 3 0 112.871 5.026v.345a.75.75 0 01-1.5 0v-.5c0-.72.57-1.172 1.081-1.287A1.5 1.5 0 108.94 6.94zM10 15a1 1 0 100-2 1 1 0 000 2z"
-                                                                        clip-rule="evenodd"
-                                                                    ></path>
-                                                                </svg>
-                                                                <span>Learn more about sharing</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
                                         </div>
                                     </div>
 
@@ -317,8 +289,17 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                                             </button>
                                             <button
                                                 type="submit"
-                                                class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                                prop:disabled=button_is_disabled()
+                                                class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-50 disabled:text-slate-500"
+                                                on:click=move |_| {
+                                                    global_state
+                                                        .get()
+                                                        .itineraries
+                                                        .add(itnerary_signal.get().into());
+                                                    show.set(false);
+                                                }
                                             >
+
                                                 Create
                                             </button>
                                         </div>
@@ -328,7 +309,7 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                         </div>
                     </div>
                 </div>
-            </AnimatedShow>
-        </div>
+            </div>
+        </AnimatedShow>
     }
 }

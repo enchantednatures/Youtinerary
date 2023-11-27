@@ -1,6 +1,6 @@
 use leptos::*;
 use leptos_router::Form;
-use web_sys::FocusEvent;
+use web_sys::{FocusEvent, KeyboardEvent};
 
 use crate::app::{
     components::{Divider, UserIcon},
@@ -35,10 +35,15 @@ pub fn SearchField() -> impl IntoView {
                 placeholder="Search..."
                 type="search"
                 name="search"
-                on:focusin=move |_ev: FocusEvent| {
+                on:focusin=move |_: FocusEvent| {
+                    show_command_pallet.set(true);
+                }
+
+                on:keydown=move |_: KeyboardEvent| {
                     show_command_pallet.set(true);
                 }
             />
+
         </Form>
     }
 }

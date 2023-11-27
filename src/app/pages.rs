@@ -4,7 +4,7 @@ use leptos_meta::*;
 use leptos_router::{use_navigate, NavigateOptions, Outlet};
 use web_sys::MouseEvent;
 
-use crate::app::components::UserSignupForm;
+use crate::app::components::{UserSignupForm};
 
 use super::state::{GlobalStateSignal, LoggedInUser};
 
