@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["components", "youtinerary"] 
+members = ["components", "state", "youtinerary"] 
 
 [workspace.dependencies]
 leptos = { version = "0.5", features = ["csr", "nightly"] }
