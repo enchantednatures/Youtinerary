@@ -268,7 +268,7 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                                                         Date Range
                                                     </label>
                                                 </div>
-                                                <div class="sm:col-span-2">
+                                                <div class="sm:col-span-2 ">
                                                     <DatePicker
                                                         selected_date=selected_date
                                                         selected_end_date=selected_end_date
