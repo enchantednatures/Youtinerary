@@ -22,9 +22,10 @@ pub struct UserSettings {
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Itinerary {
+    pub id: usize,
     pub name: String,
     pub description: String,
-    pub user_id: i32,
+    pub user_id: usize,
     pub created_at: DateTime<Utc>,
     pub start_date: NaiveDate,
     pub end_date: NaiveDate,
@@ -32,14 +33,16 @@ pub struct Itinerary {
 
 impl Itinerary {
     pub fn new(
+        id: usize,
         name: String,
         description: String,
-        user_id: i32,
+        user_id: usize,
         created_at: DateTime<Utc>,
         start_date: NaiveDate,
         end_date: NaiveDate,
     ) -> Self {
         Self {
+            id,
             name,
             description,
             user_id,

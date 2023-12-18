@@ -29,6 +29,7 @@ use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
 use crate::app::pages::ItinerariesView;
+use crate::app::pages::TravelOutlet;
 use crate::app::pages::ItineraryView;
 
 pub fn is_logged_in() -> bool {
@@ -101,7 +102,7 @@ pub fn App() -> impl IntoView {
                             <Route path="/logout" view=LogOut/>
                             <Route path="/signup" view=Signup/>
                             // <Route path="/itineraries" view=ItinerariesView/>
-                            <Route path="/itineraries" view=Home>
+                            <Route path="/itineraries" view=TravelOutlet>
                                 <Route path=":id" view=ItineraryView/>
                                 <Route path="" view=ItinerariesView/>
                             </Route>
@@ -112,4 +113,15 @@ pub fn App() -> impl IntoView {
             </div>
         </Router>
     }
+}
+
+#[component(transparent)]
+fn ItineraryInfoRoutes() -> impl IntoView {
+  view! {
+    <Route path=":id" view=ItineraryView>
+      // <Route path="" view=EmailAndPhone/>
+      // <Route path="address" view=Address/>
+      // <Route path="messages" view=Messages/>
+    </Route>
+  }
 }

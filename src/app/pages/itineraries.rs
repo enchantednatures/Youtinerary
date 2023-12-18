@@ -27,25 +27,25 @@ impl ItineraryData {
 pub fn ItinerariesView() -> impl IntoView {
     provide_meta_context();
     let state = expect_context::<GlobalStateSignal>();
-    let (itineraries, _) = create_signal(state.get().itineraries);
     let itinerary_cards = move || {
-        itineraries
+        state
             .get()
             .iter()
-            .map(|(id, itinerary)| {
+            .map(|itinerary| {
                 let (itinary_signal, _) = create_signal(itinerary.clone());
-                ItineraryData::new(*id, itinary_signal)
+                ItineraryData::new(itinerary.id, itinary_signal)
             })
             .collect_vec()
     };
     view! {
         <ul role="list" class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
             <For
+
                 each=itinerary_cards
                 key=|state| state.key
                 children=|child| {
                     let itinerary = move || child.value.get();
-                    view! { <ItineraryCard id=0 itinerary=itinerary()/> }
+                    view! { <ItineraryCard itinerary=itinerary()/> }
                 }
             />
 
@@ -54,9 +54,9 @@ pub fn ItinerariesView() -> impl IntoView {
 }
 
 #[component]
-pub fn ItineraryCard(id: usize, itinerary: Itinerary) -> impl IntoView {
+pub fn ItineraryCard(itinerary: Itinerary) -> impl IntoView {
     view! {
-        <A href=format!("{}", id)>
+        <A href=format!("{}", itinerary.id)>
             <div class="max-w-sm w-full lg:max-w-full lg:flex">
                 <div
                     class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -73,8 +73,10 @@ pub fn ItineraryCard(id: usize, itinerary: Itinerary) -> impl IntoView {
                     </div>
                     <div class="flex items-center">
                         <div class="text-sm">
-                        <p class="text-gray-900 leading-none">Hunter Casten</p>
-                        <p class="text-gray-600">{format!("{}", itinerary.start_date.format("%b %y"))}</p>
+                            <p class="text-gray-900 leading-none">Hunter Casten</p>
+                            <p class="text-gray-600">
+                                {format!("{}", itinerary.start_date.format("%b %y"))}
+                            </p>
                         </div>
                     </div>
                 </div>

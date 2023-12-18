@@ -1,6 +1,6 @@
 use leptos::*;
-use leptos_router::*;
 use leptos_meta::{provide_meta_context, Title};
+use leptos_router::*;
 
 use crate::app::state::GlobalStateSignal;
 
@@ -14,15 +14,9 @@ pub fn ItineraryView() -> impl IntoView {
     provide_meta_context();
     let global_state = expect_context::<GlobalStateSignal>();
     let params = use_params::<ItineraryParams>();
-
-    // id: || -> usize
     let id =
         move || params.with(|params| params.as_ref().map(|params| params.id).unwrap_or_default());
-    let itinerary = global_state
-        .get()
-        .get_itinerary(id())
-        .unwrap()
-        .clone();
+    let itinerary = global_state.get().get_itinerary(id()).unwrap().clone();
     let formatter = |text| format!("{text} — Youtinerary");
 
     view! {
@@ -42,7 +36,9 @@ pub fn ItineraryView() -> impl IntoView {
                 <div class="flex items-center">
                     <div class="text-sm">
                         <p class="text-gray-900 leading-none">Hunter Casten</p>
-                        <p class="text-gray-600">{format!("{}", itinerary.start_date.format("%b %y"))}</p>
+                        <p class="text-gray-600">
+                            {format!("{}", itinerary.start_date.format("%b %y"))}
+                        </p>
                     </div>
                 </div>
             </div>

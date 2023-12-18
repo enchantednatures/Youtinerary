@@ -1,32 +1,9 @@
-use chrono::{NaiveDate, Utc};
+use chrono::Utc;
 use leptos::{html::Input, leptos_dom::logging::console_log, *};
-use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 use crate::app::components::DatePicker;
-use crate::app::state::{GlobalStateSignal, STORAGE_KEY};
-use crate::models::user::Itinerary;
-
-impl From<CreateItieraryRequest> for Itinerary {
-    fn from(request: CreateItieraryRequest) -> Self {
-        Self::new(
-            request.name.get(),
-            request.description.get(),
-            0,
-            Utc::now(),
-            request.start_date.get(),
-            request.end_date.get(),
-        )
-    }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateItieraryRequest {
-    pub name: RwSignal<String>,
-    pub description: RwSignal<String>,
-    pub start_date: RwSignal<NaiveDate>,
-    pub end_date: RwSignal<NaiveDate>,
-}
+use crate::app::state::{CreateItieraryRequest, GlobalStateSignal, STORAGE_KEY};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ShowItinerarySignal(RwSignal<bool>);
@@ -229,10 +206,7 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
                                                 prop:disabled=button_is_disabled()
                                                 class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-slate-50 disabled:text-slate-500"
                                                 on:click=move |_| {
-                                                    global_state
-                                                        .get()
-                                                        .itineraries
-                                                        .add(itnerary_signal.get().into());
+                                                    global_state.get().add(itnerary_signal.get());
                                                     show.set(false);
                                                 }
                                             >
