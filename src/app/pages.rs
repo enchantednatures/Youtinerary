@@ -1,10 +1,10 @@
 use leptos::expect_context;
 use leptos::*;
-use leptos_meta::*;
-use leptos_router::{use_navigate, NavigateOptions};
-use web_sys::MouseEvent;
 
-use super::state::{GlobalStateSignal, LoggedInUser};
+
+
+
+use super::state::{GlobalStateSignal};
 
 mod home;
 mod itineraries;
