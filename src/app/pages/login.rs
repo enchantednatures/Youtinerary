@@ -58,4 +58,3 @@ pub fn LogOut() -> impl IntoView {
         </button>
     }
 }
-

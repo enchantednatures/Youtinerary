@@ -9,4 +9,3 @@ pub fn About() -> impl IntoView {
         <p class="text-center">"Youtinerary is an Itinerary for You"</p>
     }
 }
-

@@ -11,4 +11,3 @@ pub fn Signup() -> impl IntoView {
         <UserSignupForm/>
     }
 }
-

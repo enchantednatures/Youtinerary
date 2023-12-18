@@ -29,8 +29,8 @@ use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
 use crate::app::pages::ItinerariesView;
-use crate::app::pages::TravelOutlet;
 use crate::app::pages::ItineraryView;
+use crate::app::pages::TravelOutlet;
 
 pub fn is_logged_in() -> bool {
     let state = expect_context::<GlobalStateSignal>();
@@ -117,11 +117,11 @@ pub fn App() -> impl IntoView {
 
 #[component(transparent)]
 fn ItineraryInfoRoutes() -> impl IntoView {
-  view! {
-    <Route path=":id" view=ItineraryView>
-      // <Route path="" view=EmailAndPhone/>
-      // <Route path="address" view=Address/>
-      // <Route path="messages" view=Messages/>
-    </Route>
-  }
+    view! {
+      <Route path=":id" view=ItineraryView>
+        // <Route path="" view=EmailAndPhone/>
+        // <Route path="address" view=Address/>
+        // <Route path="messages" view=Messages/>
+      </Route>
+    }
 }
