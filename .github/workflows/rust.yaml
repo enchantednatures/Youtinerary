@@ -33,6 +33,9 @@ jobs:
         with:
           # Optional version of trunk to install(eg. 'v0.16.0', 'latest')
           version: "latest"
+      - name: Build
+        run: |
+            trunk build --release
       - name: cargo fmt & clippy
         run: |
           cargo fmt --all -- --check
