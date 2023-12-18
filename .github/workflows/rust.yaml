@@ -15,6 +15,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+      - name: Download and install tailwind binary
+        run: wget -qO- https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-arm64 | tar -xzf-
       - name: Setup toolchain
         uses: dtolnay/rust-toolchain@master
         with:
