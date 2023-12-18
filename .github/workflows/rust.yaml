@@ -47,8 +47,8 @@ jobs:
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 282219d344549d3c23e8448999ef4884 
+          apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
+          accountId: 282219d344549d3c23e8448999ef4884
           projectName: youtinerary
           directory: dist/
           # Optional: Enable this if you want to have GitHub Deployments triggered
