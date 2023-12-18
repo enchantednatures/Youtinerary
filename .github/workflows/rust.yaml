@@ -26,7 +26,7 @@ jobs:
       - name: Setup toolchain
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: stable
+          toolchain: nightly
           targets: wasm32-unknown-unknown
           components: rust-src
       - name: Install webkit2gtk for Tauri
