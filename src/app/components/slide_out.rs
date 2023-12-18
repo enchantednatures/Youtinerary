@@ -10,7 +10,6 @@ use crate::models::user::Itinerary;
 impl From<CreateItieraryRequest> for Itinerary {
     fn from(request: CreateItieraryRequest) -> Self {
         Self::new(
-            0,
             request.name.get(),
             request.description.get(),
             0,
@@ -66,9 +65,8 @@ pub fn CreateItinerarySlideOut() -> impl IntoView {
 
     create_effect(move |_| {
         if let Ok(Some(storage)) = window().local_storage() {
-            let json = serde_json::to_string(&global_state.get().itineraries.get())
-                .expect("couldn't serialize Todos");
-            if storage.set_item(STORAGE_KEY, &json).is_err() {
+            let json = &global_state.get().itineraries.as_json();
+            if storage.set_item(STORAGE_KEY, json).is_err() {
                 log::error!("error while trying to set item in localStorage");
             }
         }

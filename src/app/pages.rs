@@ -1,7 +1,7 @@
 use leptos::*;
 use leptos::{component, expect_context, view, IntoView};
 use leptos_meta::*;
-use leptos_router::{use_navigate, NavigateOptions, Outlet};
+use leptos_router::{use_navigate, NavigateOptions};
 use web_sys::MouseEvent;
 
 use crate::app::components::UserSignupForm;
@@ -10,9 +10,11 @@ use super::state::{GlobalStateSignal, LoggedInUser};
 
 mod home;
 mod itineraries;
+mod itinerary;
 
 pub use home::Home;
 pub use itineraries::ItinerariesView;
+pub use itinerary::ItineraryView;
 
 #[component]
 pub fn About() -> impl IntoView {

@@ -28,6 +28,8 @@ use state::GlobalStateSignal;
 use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
+use crate::app::pages::ItinerariesView;
+use crate::app::pages::ItineraryView;
 
 pub fn is_logged_in() -> bool {
     let state = expect_context::<GlobalStateSignal>();
@@ -38,12 +40,15 @@ pub fn is_logged_in() -> bool {
 pub fn App() -> impl IntoView {
     provide_meta_context();
     let show_command_pallet = create_rw_signal(false);
+
     let show_itinerary = create_rw_signal(false);
     let state = create_rw_signal(GlobalState::default());
 
     provide_context(state);
     provide_context(ShowItinerarySignal::new(show_itinerary));
-    provide_context(ShowCommandPalletSignal::new(show_command_pallet.write_only()));
+    provide_context(ShowCommandPalletSignal::new(
+        show_command_pallet.write_only(),
+    ));
 
     view! {
         <Title formatter=|text| format!("{text} — Youtinerary")/>
@@ -95,6 +100,11 @@ pub fn App() -> impl IntoView {
                             <Route path="/login" view=Login/>
                             <Route path="/logout" view=LogOut/>
                             <Route path="/signup" view=Signup/>
+                            // <Route path="/itineraries" view=ItinerariesView/>
+                            <Route path="/itineraries" view=Home>
+                                <Route path=":id" view=ItineraryView/>
+                                <Route path="" view=ItinerariesView/>
+                            </Route>
                         </Routes>
                         <div class="px-4 sm:px-6 lg:px-8"></div>
                     </main>

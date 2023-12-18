@@ -1,86 +1,84 @@
 use itertools::Itertools;
 use leptos::*;
 use leptos_meta::provide_meta_context;
+use leptos_router::*;
 
-use crate::app::state::Itineraries;
+use crate::app::state::GlobalStateSignal;
 use crate::models::user::Itinerary;
+
+#[component]
+pub fn TravelOutlet() -> impl IntoView {
+    view! { <Outlet/> }
+}
 
 #[derive(Debug, Clone)]
 pub struct ItineraryData {
-    key: i32,
+    key: usize,
     value: ReadSignal<Itinerary>,
 }
 
 impl ItineraryData {
-    pub fn new(key: i32, value: ReadSignal<Itinerary>) -> Self {
+    pub fn new(key: usize, value: ReadSignal<Itinerary>) -> Self {
         Self { key, value }
-    }
-}
-
-#[component]
-pub fn ItineraryCard(data: ItineraryData) -> impl IntoView {
-    let itinerary = data.value.get();
-    view! {
-        <div class="flex items-center justify-center h-screen">
-            <div class="w-1/2 p-6 bg-white rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold mb-2">Card Title</h2>
-                <div class="mb-4">
-                    <p>
-                        <strong>ID:</strong>
-                        123
-                    </p>
-                    <p>
-                        <strong>Name:</strong>
-                        Sample Card
-                    </p>
-                    <p>
-                        <strong>Description:</strong>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                    <p>
-                        <strong>User ID:</strong>
-                        456
-                    </p>
-                    <p>
-                        <strong>Created At:</strong>
-                        2023-01-16 12:34:56 UTC
-                    </p>
-                    <p>
-                        <strong>Start Date:</strong>
-                        2023-01-16
-                    </p>
-                    <p>
-                        <strong>End Date:</strong>
-                        2023-01-20
-                    </p>
-                </div>
-            </div>
-        </div>
     }
 }
 
 #[component]
 pub fn ItinerariesView() -> impl IntoView {
     provide_meta_context();
-    let itineraries = Itineraries::default();
-
-    let itinerary_cards = itineraries
-        .get()
-        .iter()
-        .map(|itinerary| {
-            let (itinerary_signal, _) = create_signal(itinerary.clone());
-            let data = ItineraryData::new(itinerary.id, itinerary_signal);
-            view! {
-                <li class="relative flex items-center space-x-4 py-4">
-                    <ItineraryCard data=data/>
-                </li>
-            }
-        })
-        .collect_vec();
-
+    let state = expect_context::<GlobalStateSignal>();
+    let (itineraries, _) = create_signal(state.get().itineraries);
+    let itinerary_cards = move || {
+        itineraries
+            .get()
+            .iter()
+            .map(|(id, itinerary)| {
+                let (itinary_signal, _) = create_signal(itinerary.clone());
+                ItineraryData::new(*id, itinary_signal)
+            })
+            .collect_vec()
+    };
     view! {
-        <ul role="list" class="divide-y divide-white/5">
-            {itinerary_cards}
+        <ul role="list" class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+            <For
+                each=itinerary_cards
+                key=|state| state.key
+                children=|child| {
+                    let itinerary = move || child.value.get();
+                    view! { <ItineraryCard id=0 itinerary=itinerary()/> }
+                }
+            />
+
         </ul>
+    }
+}
+
+#[component]
+pub fn ItineraryCard(id: usize, itinerary: Itinerary) -> impl IntoView {
+    view! {
+        <A href=format!("{}", id)>
+            <div class="max-w-sm w-full lg:max-w-full lg:flex">
+                <div
+                    class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+                    style="background-image: url('/img/card-left.jpg')"
+                    title="Woman holding a mug"
+                ></div>
+                <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                    <div class="mb-8">
+                        <p class="text-sm text-gray-600 flex items-center">
+                            {itinerary.description}
+                        </p>
+                        <div class="text-gray-900 font-bold text-xl mb-2">{itinerary.name}</div>
+                        <p class="text-gray-700 text-base">{itinerary.start_date.to_string()}</p>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="text-sm">
+                        <p class="text-gray-900 leading-none">Hunter Casten</p>
+                        <p class="text-gray-600">{format!("{}", itinerary.start_date.format("%b %y"))}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </A>
     }
 }

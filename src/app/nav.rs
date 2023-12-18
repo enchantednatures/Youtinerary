@@ -52,10 +52,17 @@ pub fn Nav() -> impl IntoView {
                         </Show>
                         <Show when=move || state.with(|s| s.user.is_some())>
                             <li>
+                                <NavElement name="Itineraries".to_string() link="/itineraries".into()>
+                                    <AboutIcon/>
+                                </NavElement>
+                            </li>
+
+                            <li>
                                 <NavElement name="Log Out".to_string() link="/logout".into()>
                                     <AboutIcon/>
                                 </NavElement>
                             </li>
+
                         </Show>
                     </ul>
                 </li>
