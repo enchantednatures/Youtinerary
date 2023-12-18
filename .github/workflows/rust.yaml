@@ -18,6 +18,7 @@ jobs:
       - name: Download and install tailwind binary
         run: |
           wget -q https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-arm64 -O tailwindcss
+          chmod +x tailwindcss
           echo "$GITHUB_WORKSPACE/tailwindcss" >> $GITHUB_PATH
 
       - name: Setup toolchain
