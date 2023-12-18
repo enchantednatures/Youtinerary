@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: Download and install tailwind binary
         run: |
-          wget -q https://github.com/tailwindlabs/tailwindcss/releases/latest/download/tailwindcss-linux-arm64 -O tailwindcss
+          wget -q https://github.com/tailwindlabs/tailwindcss/releases/download/v3.3.6/tailwindcss-linux-x64 -O tailwindcss
           chmod +x tailwindcss
           mkdir "$HOME/.local/bin"
           mv tailwindcss "$HOME/.local/bin/"
