@@ -35,7 +35,7 @@ pub fn ItineraryView() -> impl IntoView {
                 </div>
                 <div class="flex items-center">
                     <div class="text-sm">
-                        <p class="text-gray-900 leading-none">Hunter Casten</p>
+                        <p class="text-gray-900 leading-none">Hunter</p>
                         <p class="text-gray-600">
                             {format!("{}", itinerary.start_date.format("%b %y"))}
                         </p>
