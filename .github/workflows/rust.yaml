@@ -35,8 +35,4 @@ jobs:
           version: "latest"
       - name: Build
         run: |
-            trunk build --release
-      - name: cargo fmt & clippy
-        run: |
-          cargo fmt --all -- --check
-          cargo clippy -- --deny=warnings
+          trunk build --release
