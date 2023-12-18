@@ -4,20 +4,15 @@ use leptos_meta::*;
 use leptos_router::{use_navigate, NavigateOptions, Outlet};
 use web_sys::MouseEvent;
 
-use crate::app::components::{UserSignupForm};
+use crate::app::components::UserSignupForm;
 
 use super::state::{GlobalStateSignal, LoggedInUser};
 
-#[component]
-pub fn Home() -> impl IntoView {
-    provide_meta_context();
+mod home;
+mod itineraries;
 
-    view! {
-        <Title text="Home"/>
-        <p class="text-center">"Hello, world!"</p>
-        <Outlet/>
-    }
-}
+pub use home::Home;
+pub use itineraries::ItinerariesView;
 
 #[component]
 pub fn About() -> impl IntoView {

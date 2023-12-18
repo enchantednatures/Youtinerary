@@ -8,10 +8,8 @@ use web_sys::MouseEvent;
 
 use super::components::ShowItinerarySignal;
 
-
 #[derive(Debug, Clone, Copy)]
-pub struct ShowCommandPalletSignal( WriteSignal<bool>);
-
+pub struct ShowCommandPalletSignal(WriteSignal<bool>);
 
 impl ShowCommandPalletSignal {
     pub fn new(signal: WriteSignal<bool>) -> Self {
@@ -63,8 +61,8 @@ fn create_new_itinerary_action(_me: MouseEvent) {
 pub fn CommandPallet() -> impl IntoView {
     // let (commands, set_commands) = create_signal(vec![]);
     let (user_input, set_user_input) = create_signal(String::new());
-    let show_command_pallet =expect_context::<ShowCommandPalletSignal>();
-        // use_context().expect("Command pallet signal not provided");
+    let show_command_pallet = expect_context::<ShowCommandPalletSignal>();
+    // use_context().expect("Command pallet signal not provided");
     let input_ref = create_node_ref::<Input>();
 
     create_effect(move |_| {
@@ -86,11 +84,10 @@ pub fn CommandPallet() -> impl IntoView {
         show_command_pallet.set(false);
     };
 
-    let commands =
-        vec![
-            ("New Itinerary".to_string(), new_itinerary_action),
-            ("About".to_string(), about_action),
-        ];
+    let commands = vec![
+        ("New Itinerary".to_string(), new_itinerary_action),
+        ("About".to_string(), about_action),
+    ];
 
     let (cs, _) = create_signal(commands);
 
