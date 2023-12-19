@@ -29,6 +29,8 @@ use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
 use crate::app::pages::ItinerariesView;
+use crate::app::pages::ItineraryStays;
+use crate::app::pages::ItineraryTravelLegs;
 use crate::app::pages::ItineraryView;
 use crate::app::pages::TravelOutlet;
 
@@ -103,7 +105,7 @@ pub fn App() -> impl IntoView {
                             <Route path="/signup" view=Signup/>
                             // <Route path="/itineraries" view=ItinerariesView/>
                             <Route path="/itineraries" view=TravelOutlet>
-                                <Route path=":id" view=ItineraryView/>
+                                <ItineraryInfoRoutes/>
                                 <Route path="" view=ItinerariesView/>
                             </Route>
                         </Routes>
@@ -118,10 +120,12 @@ pub fn App() -> impl IntoView {
 #[component(transparent)]
 fn ItineraryInfoRoutes() -> impl IntoView {
     view! {
-      <Route path=":id" view=ItineraryView>
-        // <Route path="" view=EmailAndPhone/>
+        <Route path=":id" view=ItineraryView>
+            <Route path="" view=move || view! {}/>
+            <Route path="stays" view=ItineraryStays/>
+            <Route path="legs" view=ItineraryTravelLegs/>
         // <Route path="address" view=Address/>
         // <Route path="messages" view=Messages/>
-      </Route>
+        </Route>
     }
 }

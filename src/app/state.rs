@@ -39,6 +39,13 @@ impl GlobalState {
         None
     }
 
+    pub fn get_itinerary_stays(&self, itinerary_id: usize) -> Option<Vec<ItineraryStay>> {
+        if let Some(itinerary) = self.itineraries.0.get(&itinerary_id) {
+            return Some(itinerary.into());
+        }
+        None
+    }
+
     pub fn add(&mut self, itinerary: CreateItieraryRequest) {
         let storage = window()
             .local_storage()
@@ -57,6 +64,7 @@ impl GlobalState {
                 itinerary.start_date.get(),
                 itinerary.end_date.get(),
                 ItineraryStatus::Draft,
+                vec![],
                 vec![],
                 vec![],
                 vec![],
@@ -169,6 +177,7 @@ struct FullItinerary {
     pub end_date: NaiveDate,
     pub status: ItineraryStatus,
     pub items: Vec<ItineraryItem>,
+    pub stays: Vec<ItineraryStay>,
     pub shares: Vec<ItineraryShare>,
     pub travel_legs: Vec<TravelLeg>,
 }
@@ -183,6 +192,7 @@ impl FullItinerary {
         end_date: NaiveDate,
         status: ItineraryStatus,
         items: Vec<ItineraryItem>,
+        stays: Vec<ItineraryStay>,
         shares: Vec<ItineraryShare>,
         travel_legs: Vec<TravelLeg>,
     ) -> Self {
@@ -195,6 +205,7 @@ impl FullItinerary {
             end_date,
             status,
             items,
+            stays,
             shares,
             travel_legs,
         }
@@ -248,13 +259,13 @@ impl ItineraryViewModel {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct ItineraryStay {
     pub itinerary_id: i32,
     pub stay_id: i32,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Hash, Clone, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Stay {
     pub id: i32,
     pub summary: i32,
@@ -281,6 +292,13 @@ impl Stay {
             location,
             notes,
         }
+    }
+}
+
+impl From<&FullItinerary> for Vec<ItineraryStay> {
+    fn from(itinerary: &FullItinerary) -> Self {
+        // itinerary.stays.iter().cloned()
+        vec![]
     }
 }
 

@@ -22,11 +22,11 @@ pub fn ItineraryView() -> impl IntoView {
     view! {
         <Title formatter/>
         <div class="max-w-sm w-full lg:max-w-full lg:flex">
-            <div
-                class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-                style="background-image: url('/img/card-left.jpg')"
-                title="Woman holding a mug"
-            ></div>
+        //     <div
+        //         class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+        //         title="Itinerary"
+        //     >
+        // </div>
             <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
                 <div class="mb-8">
                     <p class="text-sm text-gray-600 flex items-center">{itinerary.description}</p>
@@ -42,6 +42,100 @@ pub fn ItineraryView() -> impl IntoView {
                     </div>
                 </div>
             </div>
+
         </div>
+
+        <span class="isolate inline-flex rounded-md shadow-sm">
+            <A href="stays">
+
+                <button
+                    type="button"
+                    class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                    Stays
+                </button>
+            </A>
+
+            <A href="legs">
+                <button
+                    type="button"
+                    class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                    Travels Legs
+                </button>
+
+            </A>
+            <A href="">
+                <button
+                    type="button"
+                    class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                    Close
+                </button>
+
+            </A>
+        </span>
+        <br/>
+        <Outlet/>
+    }
+}
+
+#[component]
+pub fn ItineraryStays() -> impl IntoView {
+    view! {
+        <span class="isolate inline-flex rounded-md shadow-sm">
+            <button
+                type="button"
+                class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                Hotels
+            </button>
+            <button
+                type="button"
+                class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                Hostels
+            </button>
+            <button
+                type="button"
+                class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                AirBnB
+            </button>
+        </span>
+        <p>Stays</p>
+    }
+}
+
+#[component]
+pub fn ItineraryTravelLegs() -> impl IntoView {
+    view! {
+        <span class="isolate inline-flex rounded-md shadow-sm">
+            <button
+                type="button"
+                class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                Flights
+            </button>
+            <button
+                type="button"
+                class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                Trains
+            </button>
+            <button
+                type="button"
+                class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                Bus
+            </button>
+            <button
+                type="button"
+                class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+                Taxis
+            </button>
+        </span>
+        <p>Travel Legs</p>
     }
 }

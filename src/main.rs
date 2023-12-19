@@ -1,3 +1,4 @@
+#![warn(dead_code)]
 use leptos::*;
 use youtinerary::app::App;
 

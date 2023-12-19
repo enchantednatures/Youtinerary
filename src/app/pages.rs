@@ -11,6 +11,7 @@ pub use home::Home;
 pub use itineraries::ItinerariesView;
 pub use itineraries::TravelOutlet;
 pub use itinerary::ItineraryView;
+pub use itinerary::*;
 
 mod about;
 pub use about::About;
