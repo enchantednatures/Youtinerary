@@ -23,10 +23,30 @@ impl ItineraryData {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+struct ShownItineraryOverlayContext(RwSignal<Option<usize>>);
+
+impl ShownItineraryOverlayContext {
+    pub fn new(signal: RwSignal<Option<usize>>) -> Self {
+        Self(signal)
+    }
+
+    pub fn set(&self, value: usize) {
+        self.0.set(Some(value));
+    }
+    pub fn clear(&self) {
+        self.0.set(None);
+    }
+    pub fn get(&self) -> Option<usize> {
+        self.0.get()
+    }
+
+}
 #[component]
 pub fn ItinerariesView() -> impl IntoView {
     provide_meta_context();
     let state = expect_context::<GlobalStateSignal>();
+    provide_context(ShownItineraryOverlayContext(create_rw_signal(None)));
     let itinerary_cards = move || {
         state
             .get()
@@ -56,11 +76,12 @@ pub fn ItinerariesView() -> impl IntoView {
 
 #[component]
 pub fn ItineraryCard(itinerary: Itinerary) -> impl IntoView {
-    let (show_overlay, set_show_overlay) = create_signal(false);
+    // let (show_overlay, set_show_overlay) = create_signal(false);
+    let shown_overlay = expect_context::<ShownItineraryOverlayContext>();
     view! {
         <div
             class="max-w-sm w-full lg:max-w-full lg:flex"
-            on:click=move |_| set_show_overlay(true)
+            on:click=move |_| shown_overlay.set(itinerary.id)
             id=format!("itinerary-card-{}", itinerary.id)
         >
             // <div
@@ -84,7 +105,7 @@ pub fn ItineraryCard(itinerary: Itinerary) -> impl IntoView {
                 </div>
             </div>
         </div>
-        <Show when=show_overlay fallback=|| ()>
+        <Show when=move ||Some(itinerary.id) ==  shown_overlay.get() fallback=|| ()>
             <Portal mount=document()
                 .get_element_by_id(&format!("itinerary-card-{}", itinerary.id))
                 .unwrap()>
@@ -120,7 +141,7 @@ pub fn ItineraryCard(itinerary: Itinerary) -> impl IntoView {
                     <A href="">
                         <button
                             type="button"
-                            on:click=move |_| set_show_overlay(false)
+                            on:click=move |_| shown_overlay.set(itinerary.id)
                             class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
                         >
                             Close
