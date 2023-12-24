@@ -10,9 +10,7 @@ pub fn Home() -> impl IntoView {
 
     view! {
         <Title text="Home"/>
-        <p class="text-center">"Hello, world!"</p>
         <Calendar/>
-
         <Outlet/>
     }
 }
