@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
-use crate::models::user::{Itinerary, ItineraryShareType};
+use crate::models::{Flight, Itinerary, ItineraryShareType};
 use crate::models::{ItineraryItem, ItineraryShare, ItineraryStatus, TravelLeg};
 
 pub const STORAGE_KEY: &str = "youtinerary-itineraries";
@@ -46,6 +46,43 @@ impl GlobalState {
         None
     }
 
+    pub fn add_flight(&mut self, id: usize, flight: CreateFlightRequest) {
+        let storage = window()
+            .local_storage()
+            .expect("couldn't get localStorage")
+            .unwrap();
+
+        let highest_key = self
+            .itineraries
+            .0
+            .values()
+            .map(|i| i.flights.iter().map(|f| f.id).max().unwrap_or(0))
+            .max()
+            .unwrap_or(0usize)
+            + 1;
+
+        self.itineraries.0.entry(id).and_modify(|i| {
+            i.flights.push(Flight::new(
+                highest_key,
+                id,
+                "".to_string(),
+                "".to_string(),
+                flight.departure_airport,
+                Utc::now(),
+                flight.arrival_airport,
+                Utc::now(),
+                Utc::now(),
+                Utc::now(),
+            ))
+        });
+
+        let json =
+            serde_json::to_string(&self.itineraries.0).expect("couldn't serialize Itineraries");
+        if storage.set_item(STORAGE_KEY, &json).is_err() {
+            log::error!("error while trying to set item in localStorage");
+        }
+    }
+
     pub fn add(&mut self, itinerary: CreateItieraryRequest) {
         let storage = window()
             .local_storage()
@@ -64,6 +101,7 @@ impl GlobalState {
                 itinerary.start_date.get(),
                 itinerary.end_date.get(),
                 ItineraryStatus::Draft,
+                vec![],
                 vec![],
                 vec![],
                 vec![],
@@ -128,6 +166,12 @@ trait ItineraryStorage {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct CreateFlightRequest {
+    pub departure_airport: String,
+    pub arrival_airport: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateItieraryRequest {
     pub name: RwSignal<String>,
     pub description: RwSignal<String>,
@@ -180,6 +224,7 @@ struct FullItinerary {
     pub stays: Vec<ItineraryStay>,
     pub shares: Vec<ItineraryShare>,
     pub travel_legs: Vec<TravelLeg>,
+    pub flights: Vec<Flight>,
 }
 
 impl FullItinerary {
@@ -195,6 +240,7 @@ impl FullItinerary {
         stays: Vec<ItineraryStay>,
         shares: Vec<ItineraryShare>,
         travel_legs: Vec<TravelLeg>,
+        flights: Vec<Flight>,
     ) -> Self {
         Self {
             name,
@@ -208,6 +254,7 @@ impl FullItinerary {
             stays,
             shares,
             travel_legs,
+            flights,
         }
     }
 }

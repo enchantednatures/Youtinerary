@@ -4,7 +4,7 @@ use leptos_meta::provide_meta_context;
 use leptos_router::*;
 
 use crate::app::state::GlobalStateSignal;
-use crate::models::user::Itinerary;
+use crate::models::Itinerary;
 
 #[component]
 pub fn TravelOutlet() -> impl IntoView {
