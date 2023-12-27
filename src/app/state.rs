@@ -65,12 +65,12 @@ impl GlobalState {
             i.flights.push(Flight::new(
                 highest_key,
                 id,
-                "".to_string(),
-                "".to_string(),
-                flight.departure_airport,
-                Utc::now(),
-                flight.arrival_airport,
-                Utc::now(),
+                flight.airline.get(),
+                flight.confirmation_code.get(),
+                flight.departure_airport.get(),
+                flight.departure_time.get(),
+                flight.arrival_airport.get(),
+                flight.arrival_time.get(),
                 Utc::now(),
                 Utc::now(),
             ))
@@ -83,7 +83,7 @@ impl GlobalState {
         }
     }
 
-    pub fn add(&mut self, itinerary: CreateItieraryRequest) {
+    pub fn add(&mut self, itinerary: CreateItineraryRequest) {
         let storage = window()
             .local_storage()
             .expect("couldn't get localStorage")
@@ -167,19 +167,16 @@ trait ItineraryStorage {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFlightRequest {
-
-    pub airline: String,
-    pub confirmation_code: String,
-    pub departure_airport: String,
-    pub departure_time: DateTime<Utc>,
-    pub arrival_airport: String,
-    pub arrival_time: DateTime<Utc>,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub airline: RwSignal<String>,
+    pub confirmation_code: RwSignal<String>,
+    pub departure_airport: RwSignal<String>,
+    pub departure_time: RwSignal<DateTime<Utc>>,
+    pub arrival_airport: RwSignal<String>,
+    pub arrival_time: RwSignal<DateTime<Utc>>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct CreateItieraryRequest {
+pub struct CreateItineraryRequest {
     pub name: RwSignal<String>,
     pub description: RwSignal<String>,
     pub start_date: RwSignal<NaiveDate>,

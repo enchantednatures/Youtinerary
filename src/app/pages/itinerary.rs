@@ -1,7 +1,10 @@
+use std::time::Duration;
+
 use leptos::*;
 use leptos_meta::{provide_meta_context, Title};
 use leptos_router::*;
 
+use crate::app::components::{ShowCreateFlightSlideOutSignal, CreateFlightSlideOut};
 use crate::app::state::GlobalStateSignal;
 
 #[derive(Params, PartialEq, Eq, PartialOrd, Ord)]
@@ -19,14 +22,32 @@ pub fn ItineraryView() -> impl IntoView {
     let itinerary = global_state.get().get_itinerary(id()).unwrap().clone();
     let formatter = |text| format!("{text} — Youtinerary");
 
+    let show_itinerary = create_rw_signal(false);
+    let show_create_flight = create_rw_signal(false);
+
+    provide_context(ShowCreateFlightSlideOutSignal::new(show_create_flight));
+
     view! {
         <Title formatter/>
+
+        <AnimatedShow
+            when=show_itinerary
+            // optional CSS class which will be applied if `when == true`
+            show_class="ease-out duration-900 opacity-100"
+            // optional CSS class which will be applied if `when == false` and before the
+            // `hide_delay` starts -> makes CSS unmount animations really easy
+            hide_class="ease-in duration-300 opacity-0"
+            // the given unmount delay which should match your unmount animation duration
+            hide_delay=Duration::from_millis(300)
+        >
+            <CreateFlightSlideOut/>
+        </AnimatedShow>
         <div class="max-w-sm w-full lg:max-w-full lg:flex">
-        //     <div
-        //         class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-        //         title="Itinerary"
-        //     >
-        // </div>
+            // <div
+            // class="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+            // title="Itinerary"
+            // >
+            // </div>
             <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
                 <div class="mb-8">
                     <p class="text-sm text-gray-600 flex items-center">{itinerary.description}</p>

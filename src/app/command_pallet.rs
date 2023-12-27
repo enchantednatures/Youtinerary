@@ -49,7 +49,7 @@ pub fn Command(id: usize, value: String, on_click: fn(MouseEvent) -> ()) -> impl
 }
 
 fn create_new_flight_action(_me: MouseEvent) {
-    let show_command_pallet: ShowCreateFlightSlideOutSignal =
+    let show_command_pallet: ShowCommandPalletSignal =
         use_context().expect("Show Create Flight slide out signal not provided");
     console_log("clicked new itinerary");
     let show = expect_context::<ShowCreateFlightSlideOutSignal>();
