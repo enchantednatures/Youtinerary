@@ -15,3 +15,4 @@ pub use slide_out::ShowItinerarySignal;
 pub use user_icon::UserIcon;
 pub use user_signup::UserSignupForm;
 pub use flights::*;
+pub use slide_out::*;

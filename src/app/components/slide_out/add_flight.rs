@@ -2,7 +2,6 @@ use chrono::Utc;
 use leptos::*;
 use leptos::{html::Input, leptos_dom::logging::console_log, *};
 use leptos_router::*;
-use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 use crate::app::components::DatePicker;
@@ -55,6 +54,12 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
     let itnerary_signal = create_rw_signal(CreateFlightRequest {
         departure_airport: "".to_string(),
         arrival_airport: "".to_string(),
+        airline: "".to_string(),
+        confirmation_code: "".to_string(),
+        departure_time: Utc::now(),
+        arrival_time: Utc::now(),
+        created_at: Utc::now(),
+        updated_at: Utc::now(),
     });
 
     let slide_target = create_node_ref::<Input>();
@@ -97,10 +102,10 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
                                                         class="text-base font-semibold leading-6 text-gray-900"
                                                         id="slide-over-title"
                                                     >
-                                                        New itinerary
+                                                        Add new flight to Itinerary
                                                     </h2>
                                                     <p class="text-sm text-gray-500">
-                                                        Get started by filling in the information below to create your new itinerary.
+                                                        Get started by filling in the information below to create your new flight.
                                                     </p>
                                                 </div>
                                                 <div class="flex h-7 items-center">

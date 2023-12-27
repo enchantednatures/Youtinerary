@@ -28,6 +28,8 @@ use state::GlobalStateSignal;
 use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
+use crate::app::components::CreateFlightSlideOut;
+use crate::app::components::ShowCreateFlightSlideOutSignal;
 use crate::app::pages::ItinerariesView;
 use crate::app::pages::ItineraryStays;
 use crate::app::pages::ItineraryTravelLegs;
@@ -45,10 +47,12 @@ pub fn App() -> impl IntoView {
     let show_command_pallet = create_rw_signal(false);
 
     let show_itinerary = create_rw_signal(false);
+    let show_create_flight = create_rw_signal(false);
     let state = create_rw_signal(GlobalState::default());
 
     provide_context(state);
     provide_context(ShowItinerarySignal::new(show_itinerary));
+    provide_context(ShowCreateFlightSlideOutSignal::new(show_create_flight));
     provide_context(ShowCommandPalletSignal::new(
         show_command_pallet.write_only(),
     ));
@@ -83,6 +87,19 @@ pub fn App() -> impl IntoView {
                             hide_delay=Duration::from_millis(300)
                         >
                             <CommandPallet/>
+                        </AnimatedShow>
+
+                        <AnimatedShow
+                            when=show_itinerary
+                            // optional CSS class which will be applied if `when == true`
+                            show_class="ease-out duration-900 opacity-100"
+                            // optional CSS class which will be applied if `when == false` and before the
+                            // `hide_delay` starts -> makes CSS unmount animations really easy
+                            hide_class="ease-in duration-300 opacity-0"
+                            // the given unmount delay which should match your unmount animation duration
+                            hide_delay=Duration::from_millis(300)
+                        >
+                            <CreateFlightSlideOut />
                         </AnimatedShow>
 
                         <AnimatedShow

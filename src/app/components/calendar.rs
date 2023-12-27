@@ -1,7 +1,4 @@
-use std::collections::HashMap;
-use std::fmt::Debug;
-
-use chrono::{Datelike, Months, NaiveDate, NaiveTime, Timelike};
+use chrono::{Datelike, Months, NaiveDate, NaiveTime};
 use leptos::*;
 use leptos_router::A;
 
@@ -26,7 +23,7 @@ impl CalendarState {
 #[component]
 pub fn Calendar() -> impl IntoView {
     let current_date = chrono::Utc::now();
-    let today = current_date.date_naive();
+    let _today = current_date.date_naive();
     provide_context(CalendarState::new());
     let mut weeks = Vec::new();
 

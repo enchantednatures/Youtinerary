@@ -6,7 +6,7 @@ use leptos_router::{use_navigate, NavigateOptions};
 use leptos_use::{use_element_hover_with_options, UseElementHoverOptions};
 use web_sys::MouseEvent;
 
-use super::components::ShowItinerarySignal;
+use super::components::{ShowCreateFlightSlideOutSignal, ShowItinerarySignal};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ShowCommandPalletSignal(WriteSignal<bool>);
@@ -48,6 +48,15 @@ pub fn Command(id: usize, value: String, on_click: fn(MouseEvent) -> ()) -> impl
     }
 }
 
+fn create_new_flight_action(_me: MouseEvent) {
+    let show_command_pallet: ShowCreateFlightSlideOutSignal =
+        use_context().expect("Show Create Flight slide out signal not provided");
+    console_log("clicked new itinerary");
+    let show = expect_context::<ShowCreateFlightSlideOutSignal>();
+    show.set(true);
+    show_command_pallet.set(false);
+}
+
 fn create_new_itinerary_action(_me: MouseEvent) {
     let show_command_pallet: ShowCommandPalletSignal =
         use_context().expect("Command pallet signal not provided");
@@ -72,6 +81,7 @@ pub fn CommandPallet() -> impl IntoView {
     });
 
     let new_itinerary_action: fn(MouseEvent) -> _ = create_new_itinerary_action;
+    let new_flight_action: fn(MouseEvent) -> _ = create_new_flight_action;
 
     let about_action: fn(MouseEvent) -> _ = |_| {
         let show_command_pallet: ShowCommandPalletSignal =
@@ -86,6 +96,7 @@ pub fn CommandPallet() -> impl IntoView {
 
     let commands = vec![
         ("New Itinerary".to_string(), new_itinerary_action),
+        ("New Flight".to_string(), new_flight_action),
         ("About".to_string(), about_action),
     ];
 

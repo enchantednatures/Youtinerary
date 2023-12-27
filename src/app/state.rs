@@ -167,8 +167,15 @@ trait ItineraryStorage {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct CreateFlightRequest {
+
+    pub airline: String,
+    pub confirmation_code: String,
     pub departure_airport: String,
+    pub departure_time: DateTime<Utc>,
     pub arrival_airport: String,
+    pub arrival_time: DateTime<Utc>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
