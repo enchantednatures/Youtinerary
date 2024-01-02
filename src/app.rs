@@ -87,8 +87,6 @@ pub fn App() -> impl IntoView {
                             <CommandPallet/>
                         </AnimatedShow>
 
-
-
                         <AnimatedShow
                             when=show_itinerary
                             // optional CSS class which will be applied if `when == true`

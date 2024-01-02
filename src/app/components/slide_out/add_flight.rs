@@ -1,9 +1,10 @@
 use chrono::Utc;
+use leptos::html::Input;
 use leptos::*;
-use leptos::{html::Input, leptos_dom::logging::console_log};
 use leptos_router::*;
 
-use crate::app::components::DatePicker;
+use crate::app::components::date_picker::DateTimePicker;
+use crate::app::pages::ItineraryParams;
 use crate::app::state::{CreateFlightRequest, GlobalStateSignal};
 
 #[derive(Debug, Clone, Copy)]
@@ -17,43 +18,43 @@ impl ShowCreateFlightSlideOutSignal {
     pub fn set(&self, value: bool) {
         self.0.set(value);
     }
-
-}
-
-#[derive(Params, PartialEq, Eq, PartialOrd, Ord)]
-pub struct CreateFlightSlideOutParams {
-    pub itinerary_id: usize,
 }
 
 #[component]
-pub fn CreateFlightSlideOut() -> impl IntoView {
-    let show: ShowCreateFlightSlideOutSignal = expect_context::<ShowCreateFlightSlideOutSignal>();
+pub fn CreateFlightSlideOut(itinerary_id: usize) -> impl IntoView {
     let global_state = expect_context::<GlobalStateSignal>();
 
-    let params = use_params::<CreateFlightSlideOutParams>();
-
-    let itinerary_id = move || {
-        params.with(|params| {
-            params
-                .as_ref()
-                .map(|params| params.itinerary_id)
-                .unwrap_or_default()
-        })
+    let show = use_context::<ShowCreateFlightSlideOutSignal>();
+    let show = match show {
+        Some(show) => show,
+        None => {
+            let sig = ShowCreateFlightSlideOutSignal::new(create_rw_signal(false));
+            provide_context(sig);
+            sig
+        }
     };
+    // let params = use_params::<ItineraryParams>();
 
-    let name_signal = create_rw_signal("".to_string());
-    let description_signal = create_rw_signal("".to_string());
+    // let itinerary_id =
+    //     move || params.with(|params| params.as_ref().map(|params| params.id).unwrap_or_default());
 
-    let  departure_date= create_rw_signal(Utc::now().naive_utc().date());
-    let arrival_date = create_rw_signal(Utc::now().naive_utc().date());
+    // let itinerary_id = move || itinerary_id;
+
+    let departure_airport = create_rw_signal("".to_string());
+    let arrival_airport = create_rw_signal("".to_string());
+    let airline = create_rw_signal("".to_string());
+    let confirmation_code = create_rw_signal("".to_string());
+
+    let departure_time = create_rw_signal(Utc::now());
+    let arrival_time = create_rw_signal(Utc::now());
 
     let itnerary_signal = create_rw_signal(CreateFlightRequest {
-        departure_airport: "".to_string(),
-        arrival_airport: "".to_string(),
-        airline: "".to_string(),
-        confirmation_code: "".to_string(),
-        departure_time: Utc::now(),
-        arrival_time: Utc::now(),
+        departure_airport,
+        arrival_airport,
+        airline,
+        confirmation_code,
+        departure_time,
+        arrival_time,
     });
 
     let slide_target = create_node_ref::<Input>();
@@ -64,8 +65,12 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
         }
     });
 
-    let (button_is_disabled, _) =
-        create_signal(move || name_signal.get().is_empty() || description_signal.get().is_empty());
+    let (button_is_disabled, _) = create_signal(move || {
+        departure_airport.get().is_empty()
+            || arrival_airport.get().is_empty()
+            || airline.get().is_empty()
+            || confirmation_code.get().is_empty()
+    });
 
     view! {
         <div
@@ -127,23 +132,22 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
                                         <div class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                             <div>
                                                 <label
-                                                    for="itinerary-name"
+                                                    for="departure-airport"
                                                     class="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
                                                 >
-                                                    Itinerary name
+                                                    Departure Airport
                                                 </label>
                                             </div>
                                             <div class="sm:col-span-2">
                                                 <input
                                                     type="text"
                                                     node_ref=slide_target
-                                                    name="itinerary-name"
-                                                    id="itinerary-name"
+                                                    name="departure-airport"
+                                                    id="departure-airport"
                                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     autofocus=true
                                                     on:input=move |ev| {
-                                                        name_signal.set(event_target_value(&ev));
-                                                        console_log(&name_signal.get());
+                                                        departure_airport.set(event_target_value(&ev));
                                                     }
                                                 />
 
@@ -153,24 +157,25 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
                                         <div class="space-y-2 px-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:space-y-0 sm:px-6 sm:py-5">
                                             <div>
                                                 <label
-                                                    for="itinerary-description"
+                                                    for="arrival-airport"
                                                     class="block text-sm font-medium leading-6 text-gray-900 sm:mt-1.5"
                                                 >
-                                                    Description
+                                                    Departure Airport
                                                 </label>
                                             </div>
                                             <div class="sm:col-span-2">
-                                                <textarea
-                                                    id="itinerary-description"
-                                                    name="itinerary-description"
-                                                    rows="3"
+                                                <input
+                                                    type="text"
+                                                    node_ref=slide_target
+                                                    name="arrival-airport"
+                                                    id="arrival-airport"
                                                     class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    autofocus=true
                                                     on:input=move |ev| {
-                                                        description_signal.set(event_target_value(&ev));
-                                                        console_log(&description_signal.get());
+                                                        arrival_airport.set(event_target_value(&ev));
                                                     }
-                                                >
-                                                </textarea>
+                                                />
+
                                             </div>
                                         </div>
 
@@ -184,10 +189,9 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
                                                 </label>
                                             </div>
                                             <div class="sm:col-span-2">
-                                                <DatePicker
-                                                    selected_date=departure_date
-                                                    selected_end_date=arrival_date
-                                                />
+                                                <DateTimePicker selected_date=departure_time/>
+
+                                                <DateTimePicker selected_date=arrival_time/>
                                             </div>
                                         </div>
                                     </div>
@@ -210,7 +214,7 @@ pub fn CreateFlightSlideOut() -> impl IntoView {
                                             on:click=move |_| {
                                                 global_state
                                                     .get()
-                                                    .add_flight(itinerary_id(), itnerary_signal.get());
+                                                    .add_flight(itinerary_id, itnerary_signal.get());
                                                 show.set(false);
                                             }
                                         >

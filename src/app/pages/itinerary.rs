@@ -4,12 +4,12 @@ use leptos::*;
 use leptos_meta::{provide_meta_context, Title};
 use leptos_router::*;
 
-use crate::app::components::{ShowCreateFlightSlideOutSignal, CreateFlightSlideOut};
+use crate::app::components::{CreateFlightSlideOut, ShowCreateFlightSlideOutSignal};
 use crate::app::state::GlobalStateSignal;
 
-#[derive(Params, PartialEq, Eq, PartialOrd, Ord)]
-struct ItineraryParams {
-    id: usize,
+#[derive(Params, PartialEq, Eq, Clone, Debug)]
+pub struct ItineraryParams {
+    pub id: usize,
 }
 
 #[component]
@@ -17,12 +17,12 @@ pub fn ItineraryView() -> impl IntoView {
     provide_meta_context();
     let global_state = expect_context::<GlobalStateSignal>();
     let params = use_params::<ItineraryParams>();
-    let id =
-        move || params.with(|params| params.as_ref().map(|params| params.id).unwrap_or_default());
-    let itinerary = global_state.get().get_itinerary(id()).unwrap().clone();
+    let id = params.with(|params| params.as_ref().map(|params| params.id).unwrap_or_default());
+    // let id = params.to_owned
+    // let id  = params.get().map(|params| params.id).ok();
+    let itinerary = create_memo(move |_| global_state.get().get_itinerary(id));
     let formatter = |text| format!("{text} — Youtinerary");
 
-    let show_itinerary = create_rw_signal(false);
     let show_create_flight = create_rw_signal(false);
 
     provide_context(ShowCreateFlightSlideOutSignal::new(show_create_flight));
@@ -31,7 +31,7 @@ pub fn ItineraryView() -> impl IntoView {
         <Title formatter/>
 
         <AnimatedShow
-            when=show_itinerary
+            when=show_create_flight
             // optional CSS class which will be applied if `when == true`
             show_class="ease-out duration-900 opacity-100"
             // optional CSS class which will be applied if `when == false` and before the
@@ -40,7 +40,7 @@ pub fn ItineraryView() -> impl IntoView {
             // the given unmount delay which should match your unmount animation duration
             hide_delay=Duration::from_millis(300)
         >
-            <CreateFlightSlideOut/>
+            <CreateFlightSlideOut itinerary_id=id/>
         </AnimatedShow>
         <div class="max-w-sm w-full lg:max-w-full lg:flex">
             // <div
@@ -50,15 +50,21 @@ pub fn ItineraryView() -> impl IntoView {
             // </div>
             <div class="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
                 <div class="mb-8">
-                    <p class="text-sm text-gray-600 flex items-center">{itinerary.description}</p>
-                    <div class="text-gray-900 font-bold text-xl mb-2">{itinerary.name}</div>
-                    <p class="text-gray-700 text-base">{itinerary.start_date.to_string()}</p>
+                    <p class="text-sm text-gray-600 flex items-center">
+                        {move || itinerary().expect("").description}
+                    </p>
+                    <div class="text-gray-900 font-bold text-xl mb-2">
+                        {move || itinerary().unwrap().name}
+                    </div>
+                    <p class="text-gray-700 text-base">
+                        {move || itinerary().unwrap().start_date.to_string()}
+                    </p>
                 </div>
                 <div class="flex items-center">
                     <div class="text-sm">
                         <p class="text-gray-900 leading-none">Hunter</p>
                         <p class="text-gray-600">
-                            {format!("{}", itinerary.start_date.format("%b %y"))}
+                            {format!("{}", itinerary().unwrap().start_date.format("%b %y"))}
                         </p>
                     </div>
                 </div>

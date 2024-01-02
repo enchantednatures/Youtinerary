@@ -1,5 +1,27 @@
-use chrono::{NaiveDate, Utc};
+use chrono::{DateTime, NaiveDate, Utc};
 use leptos::*;
+
+#[component]
+pub fn DateTimePicker(selected_date: RwSignal<DateTime<Utc>>) -> impl IntoView {
+    let today = Utc::now().date_naive().format("%Y-%m-%d").to_string();
+
+    view! {
+        <input
+            type="date"
+            class="w-3/8 block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+            prop:value=&today
+            min=&today
+            on:input=move |ev| {
+                selected_date
+                    .set(
+                        event_target_value(&ev)
+                            .parse::<DateTime<Utc>>()
+                            .expect("Failed to parse departure date"),
+                    )
+            }
+        />
+    }
+}
 
 #[component]
 pub fn DatePicker(
