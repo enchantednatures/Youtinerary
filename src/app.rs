@@ -8,6 +8,7 @@ mod command_pallet;
 mod components;
 mod icons;
 mod nav;
+mod auth;
 
 use nav::Nav;
 
