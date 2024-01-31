@@ -20,8 +20,15 @@ pub struct LoggedInUser {
 
 #[derive(Clone, Debug, Default)]
 pub struct GlobalState {
+    pub http_client: reqwest::Client,
     pub user: Option<LoggedInUser>,
     pub itineraries: Itineraries,
+}
+
+impl From<GlobalState> for reqwest::Client {
+    fn from(value: GlobalState) -> Self {
+        value.http_client
+    }
 }
 
 impl GlobalState {

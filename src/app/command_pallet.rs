@@ -3,7 +3,7 @@ use leptos::leptos_dom::logging::console_log;
 
 use leptos::{html::Input, *};
 use leptos_router::{use_navigate, NavigateOptions};
-use leptos_use::{use_element_hover_with_options, UseElementHoverOptions};
+use leptos_use::{use_element_hover_with_options, UseElementHoverOptions, use_element_hover};
 use web_sys::MouseEvent;
 
 use super::components::{ShowCreateFlightSlideOutSignal, ShowItinerarySignal};
@@ -25,12 +25,8 @@ impl ShowCommandPalletSignal {
 pub fn Command(id: usize, value: String, on_click: fn(MouseEvent) -> ()) -> impl IntoView {
     // this will have to change when we add keyboard support
     let target = create_node_ref::<Li>();
-    let is_hovered = use_element_hover_with_options(
-        target,
-        UseElementHoverOptions::default()
-            .delay_enter(0)
-            .delay_leave(30),
-    );
+    // leptos 6 broke leptos use
+    let is_hovered = move || false;
 
     view! {
         <li

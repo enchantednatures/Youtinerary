@@ -4,11 +4,11 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
+mod auth;
 mod command_pallet;
 mod components;
 mod icons;
 mod nav;
-mod auth;
 
 use nav::Nav;
 
@@ -29,8 +29,6 @@ use state::GlobalStateSignal;
 use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
-use crate::app::components::CreateFlightSlideOut;
-use crate::app::components::ShowCreateFlightSlideOutSignal;
 use crate::app::pages::ItinerariesView;
 use crate::app::pages::ItineraryStays;
 use crate::app::pages::ItineraryTravelLegs;
