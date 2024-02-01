@@ -38,9 +38,9 @@ jobs:
           # Optional version of trunk to install(eg. 'v0.16.0', 'latest')
           version: "latest"
       - name: Build
-        run:
-          working-directory: webapp
-          shell: trunk build --release
+        working-directory: webapp
+        run: |
+          trunk build --release
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
