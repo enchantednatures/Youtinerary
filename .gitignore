@@ -1,7 +1,2 @@
 /target
-/Cargo.lock
-/dist
 /.envrc
-style/main.css
-/.idea
-.env

@@ -1,23 +1,13 @@
-[package]
-name = "youtinerary"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "2"
+members = [ "api","auth", "components", "pages", "webapp"]
 
-[profile.dev]
-opt-level = 1
-[profile.dev.package."*"]
+[profile.dev.package.sqlx-macros]
 opt-level = 3
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-[profile.wasm-release]
-inherits = "release"
-opt-level = 'z'
-lto = true
-codegen-units = 1
-
-[dependencies]
+[workspace.dependencies]
 leptos = { version = "0.6", features = ["csr", "nightly"] }
-leptos-use = { version = "0.9", features = ["serde", "serde_json" ] }
+leptos-use = { version = "0.10", features = ["serde", "serde_json" ] }
 leptos_router = { version = "0.6", features = ["csr", "nightly"] }
 serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
@@ -35,4 +25,19 @@ chrono = { version = "0.4", features = ["serde"] }
 itertools = "0.12"
 reqwest = {version = "0.11", features = ["json"]}
 anyhow = "1.0"
+sqlx = { version = "0.7", features = ["runtime-tokio-native-tls", "postgres",  "chrono", "uuid" ] }
+tokio = {version="1.35", features = ["rt-multi-thread"]}
+tracing-bunyan-formatter = "0.3"
+hyper = { version = "1", features = ["server"] }
+axum-extra = { version="0.9",  features = ["typed-header"] }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["fs", "trace", "cors"] }
+headers = "0.4"
+oauth2 = "4.4"
+async-session = "3.0"
+redis = { version = "0.24", features = ["tokio-comp"] }
+config = { version = "0.14", default-features = false, features = ["yaml"] }
 
+[workspace.dependencies.axum]
+version = "0.7"
+features = [ "json", "multipart", "tracing", "ws"]
