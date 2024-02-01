@@ -1,5 +1,4 @@
 name: build
-
 on:
   push:
     branches:
@@ -8,11 +7,9 @@ on:
       - "**.md"
       - "**.png"
       - "**cd.yml"
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v1
       - name: Download and install tailwind binary
@@ -22,7 +19,6 @@ jobs:
           mkdir "$HOME/.local/bin"
           mv tailwindcss "$HOME/.local/bin/"
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-
       - name: Setup toolchain
         uses: dtolnay/rust-toolchain@master
         with:
@@ -42,18 +38,16 @@ jobs:
           # Optional version of trunk to install(eg. 'v0.16.0', 'latest')
           version: "latest"
       - name: Build
-        working-directory: webapp
-        run: |
-          trunk build --release
-
+        run:
+          working-directory: webapp
+          shell: trunk build --release
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
-        working-directory: webapp
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
           accountId: 282219d344549d3c23e8448999ef4884
           projectName: youtinerary
-          directory: dist/
+          directory: webapp/dist/
           # Optional: Enable this if you want to have GitHub Deployments triggered
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
           # Optional: Switch what branch you are publishing to.
