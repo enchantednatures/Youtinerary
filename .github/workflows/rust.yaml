@@ -37,7 +37,6 @@ jobs:
         with:
           version: "latest"
       - name: Build
-        working-directory: webapp
         run: |
           trunk build --release
       - name: Publish to Cloudflare Pages
