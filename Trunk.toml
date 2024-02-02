@@ -1,6 +1,11 @@
 [build]
 target = "webapp/index.html"
-dist = "webapp/dist"
+dist = "dist"
+
+[clean]
+# The output dir for all final assets.
+dist = "dist"
+cargo = true
 
 [tools]
 tailwindcss = "3.3.5"
