@@ -1,10 +1,8 @@
 use leptos::*;
 use leptos_router::*;
+use state::GlobalStateSignal;
 
-use crate::app::{
-    icons::{AboutIcon, HomeIcon, SettingsIcon},
-    state::GlobalStateSignal,
-};
+use crate::app::icons::{AboutIcon, HomeIcon, SettingsIcon};
 
 #[component]
 fn NavElement(name: String, link: String, children: Children) -> impl IntoView {
@@ -52,7 +50,10 @@ pub fn Nav() -> impl IntoView {
                         </Show>
                         <Show when=move || state.with(|s| s.user.is_some())>
                             <li>
-                                <NavElement name="Itineraries".to_string() link="/itineraries".into()>
+                                <NavElement
+                                    name="Itineraries".to_string()
+                                    link="/itineraries".into()
+                                >
                                     <AboutIcon/>
                                 </NavElement>
                             </li>

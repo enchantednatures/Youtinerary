@@ -1,14 +1,17 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+mod calendar;
+mod date_picker;
+mod divider;
+mod flights;
+mod forms;
+mod slide_out;
+mod user_icon;
+mod user_signup;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use calendar::*;
+pub use date_picker::*;
+pub use divider::*;
+pub use flights::*;
+pub use forms::*;
+pub use slide_out::*;
+pub use user_icon::*;
+pub use user_signup::*;

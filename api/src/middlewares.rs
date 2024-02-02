@@ -6,7 +6,8 @@ use auth::{AuthRedirect, AuthentikUser};
 
 use axum::http::request::Parts;
 
-use crate::models::User;
+use crate::User;
+
 
 trait UserRepository {
     async fn get_user<'a>(&self, email: &'a str) -> Result<Option<User>>;

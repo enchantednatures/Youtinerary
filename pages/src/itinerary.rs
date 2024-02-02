@@ -4,8 +4,8 @@ use leptos::*;
 use leptos_meta::{provide_meta_context, Title};
 use leptos_router::*;
 
-use crate::app::components::{CreateFlightSlideOut, ShowCreateFlightSlideOutSignal};
-use crate::app::state::GlobalStateSignal;
+use components::{CreateFlightSlideOut, ShowCreateFlightSlideOutSignal};
+use state::GlobalStateSignal;
 
 #[derive(Params, PartialEq, Eq, Clone, Debug)]
 pub struct ItineraryParams {

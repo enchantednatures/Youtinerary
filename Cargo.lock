@@ -588,6 +588,27 @@ dependencies = [
 [[package]]
 name = "components"
 version = "0.1.0"
+dependencies = [
+ "chrono",
+ "chrono-tz",
+ "console_error_panic_hook",
+ "console_log",
+ "gloo-net 0.5.0",
+ "itertools",
+ "leptos",
+ "leptos-use",
+ "leptos_meta",
+ "leptos_router",
+ "log",
+ "models",
+ "serde",
+ "serde_json",
+ "state",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "config"
@@ -2034,6 +2055,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "models"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "serde",
+ "uuid",
+]
+
+[[package]]
 name = "multer"
 version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2278,9 +2308,11 @@ dependencies = [
  "leptos_meta",
  "leptos_router",
  "log",
+ "models",
  "reqwest",
  "serde",
  "serde_json",
+ "state",
  "tracing",
  "tracing-subscriber",
  "uuid",
@@ -3456,6 +3488,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "state"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "leptos",
+ "log",
+ "models",
+ "reqwest",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "stringprep"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4156,6 +4201,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "chrono-tz",
+ "components",
  "console_error_panic_hook",
  "console_log",
  "gloo-net 0.5.0",
@@ -4169,6 +4215,7 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
+ "state",
  "tracing",
  "tracing-subscriber",
  "uuid",

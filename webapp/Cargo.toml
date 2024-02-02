@@ -25,3 +25,5 @@ reqwest = {workspace = true }
 anyhow = {workspace = true } 
 
 pages= { path = "../pages" }
+state= { path = "../state" }
+components= { path = "../components" }

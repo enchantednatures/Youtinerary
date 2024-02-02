@@ -1,6 +1,6 @@
 use leptos::*;
 
-use crate::app::state::GlobalStateSignal;
+use state::GlobalStateSignal;
 
 #[component]
 pub fn UserIcon() -> impl IntoView {

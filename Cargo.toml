@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "api","auth", "components", "pages", "webapp"]
+members = [ "api","auth", "components", "pages", "state", "webapp"]
 
 [profile.dev.package.sqlx-macros]
 opt-level = 3

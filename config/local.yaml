@@ -1,0 +1,13 @@
+database_url: postgres://youtinerary_local_service:HannahH0ney@tower/youtinerary_local
+auth_settings:
+  client_id: MJMA1gc26LxdVxJQD3hRiHoEIyoAqQLHwusvTuom
+  client_secret: A8vhhkaBDlPSKPOvuCqFM5VxP9YSvu50hl1h8WyrAo4MNxAIYbFuwsW3I73Y6qf06JA1wvJdeZwNJkoNBnUjQfe90SyXQlityZOrchnjo7F2RMO7uNPqDuNoMshK1uLb
+  redirect_url: http://localhost:6969/authorized
+  token_url: https://auth.enchantednatures.com/application/o/token/
+  auth_url: https://auth.enchantednatures.com/application/o/authorize/
+  introspection_url: https://auth.enchantednatures.com/application/o/userinfo/
+  revocation_url: https://auth.enchantednatures.com/application/o/revoke/
+redis_url: redis://tower:6379/7
+app_settings:
+  addr: [ 0, 0, 0, 0 ]
+  port: 6969

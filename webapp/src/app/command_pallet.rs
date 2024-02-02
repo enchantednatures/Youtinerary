@@ -6,7 +6,7 @@ use leptos_router::{use_navigate, NavigateOptions};
 use leptos_use::{use_element_hover_with_options, UseElementHoverOptions, use_element_hover};
 use web_sys::MouseEvent;
 
-use super::components::{ShowCreateFlightSlideOutSignal, ShowItinerarySignal};
+use components::{ShowCreateFlightSlideOutSignal, ShowItinerarySignal};
 
 #[derive(Debug, Clone, Copy)]
 pub struct ShowCommandPalletSignal(WriteSignal<bool>);

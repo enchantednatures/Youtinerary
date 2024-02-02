@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 
 use std::collections::HashMap;
 
-use crate::models::{Flight, Itinerary, ItineraryShareType};
-use crate::models::{ItineraryItem, ItineraryShare, ItineraryStatus, TravelLeg};
+use models::{Flight, Itinerary, ItineraryShareType};
+use models::{ItineraryItem, ItineraryShare, ItineraryStatus, TravelLeg};
 
 pub const STORAGE_KEY: &str = "youtinerary-itineraries";
 
@@ -25,6 +25,22 @@ pub struct GlobalState {
     pub itineraries: Itineraries,
 }
 
+struct It<'a>(usize,&'a FullItinerary);
+
+impl <'a> From<It<'a>> for Itinerary {
+    fn from(It(id, value): It<'a>) -> Self {
+        Self {
+            id,
+            name: value.name.clone(),
+            description: value.description.clone(),
+            user_id: value.user_id,
+            created_at: value.created_at,
+            start_date: value.start_date,
+            end_date: value.end_date,
+        }
+    }
+}
+
 impl From<GlobalState> for reqwest::Client {
     fn from(value: GlobalState) -> Self {
         value.http_client
@@ -36,12 +52,12 @@ impl GlobalState {
         self.itineraries
             .0
             .iter()
-            .map(|(id, value)| (*id, value).into())
+            .map(|(id, value)| It(*id, value).into())
     }
 
     pub fn get_itinerary(&self, id: usize) -> Option<Itinerary> {
         if let Some(itinerary) = self.itineraries.0.get(&id) {
-            return Some((id, itinerary).into());
+            return Some(It(id, itinerary).into());
         }
         None
     }
@@ -270,19 +286,7 @@ impl FullItinerary {
     }
 }
 
-impl From<(usize, &FullItinerary)> for Itinerary {
-    fn from((id, value): (usize, &FullItinerary)) -> Self {
-        Self {
-            id,
-            name: value.name.clone(),
-            description: value.description.clone(),
-            user_id: value.user_id,
-            created_at: value.created_at,
-            start_date: value.start_date,
-            end_date: value.end_date,
-        }
-    }
-}
+
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ItineraryViewModel {

@@ -26,3 +26,5 @@ reqwest = {workspace = true }
 anyhow = {workspace = true } 
 
 components = { path = "../components" }
+state= { path = "../state" }
+models= { path = "../models" }

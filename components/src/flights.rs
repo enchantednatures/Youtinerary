@@ -2,20 +2,16 @@ use chrono::{DateTime, Utc};
 use leptos::*;
 use leptos_router::*;
 use serde::{Deserialize, Serialize};
-
-use crate::models::Flight;
-
-
+use models::Flight;
 
 #[component]
-pub fn FlightSummaryCard(flight: Flight)-> impl IntoView { 
-    view!{
-        <div> 
+pub fn FlightSummaryCard(flight: Flight) -> impl IntoView {
+    view! {
+        <div>
             <p>{flight.airline}</p>
             <p>{flight.departure_airport}</p>
             <p>{flight.arrival_airport}</p>
         </div>
-
     }
 }
 

@@ -1,3 +1,10 @@
+use pages::ItineraryTravelLegs;
+use pages::ItineraryView;
+use pages::ItineraryStays;
+use pages::ItinerariesView;
+use components::CreateItinerarySlideOut;
+use components::ShowItinerarySignal;
+use pages::TravelOutlet;
 use std::time::Duration;
 
 use leptos::*;
@@ -6,35 +13,24 @@ use leptos_router::*;
 
 mod auth;
 mod command_pallet;
-mod components;
 mod icons;
 mod nav;
 
 use nav::Nav;
 
-mod pages;
-use ::pages::about::About;
-use pages::{Home, LogOut, Login, Signup};
+use pages::{About, Home, LogOut, Login, Signup};
 
 mod header;
 use header::Header;
 use icons::LogoIcon;
 
-mod state;
 
-use components::CreateItinerarySlideOut;
-use components::ShowItinerarySignal;
 use state::GlobalState;
 use state::GlobalStateSignal;
 
 use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
-use crate::app::pages::ItinerariesView;
-use crate::app::pages::ItineraryStays;
-use crate::app::pages::ItineraryTravelLegs;
-use crate::app::pages::ItineraryView;
-use crate::app::pages::TravelOutlet;
 
 pub fn is_logged_in() -> bool {
     let state = expect_context::<GlobalStateSignal>();

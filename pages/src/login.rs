@@ -2,11 +2,16 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 
-use crate::app::pages::logout;
-use crate::app::state::{GlobalStateSignal, LoggedInUser};
 use anyhow::Result;
+use state::{GlobalStateSignal, LoggedInUser};
 
 use web_sys::MouseEvent;
+
+pub fn logout() {
+    let state = expect_context::<GlobalStateSignal>();
+
+    state.update(|s| s.user = None);
+}
 
 pub fn login() {
     let state = expect_context::<GlobalStateSignal>();
@@ -21,11 +26,13 @@ pub fn login() {
         })
     });
 }
-pub trait LoginService {
+
+trait LoginService {
     const LOGIN_URL: &'static str;
     async fn login(&self) -> Result<String>;
     async fn logout(&self) -> Result<()>;
 }
+
 impl LoginService for reqwest::Client {
     const LOGIN_URL: &'static str = "http://127.0.0.1:6969/";
     async fn login(&self) -> Result<String> {
@@ -61,6 +68,7 @@ pub fn Login() -> impl IntoView {
                 navigate("/", NavigateOptions::default());
             }
         >
+
             {move || async_data.get()}
             Login
         </button>
