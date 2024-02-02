@@ -31,11 +31,9 @@ jobs:
           sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
       - uses: jetli/wasm-pack-action@v0.4.0
         with:
-          # Optional version of wasm-pack to install(eg. '', 'latest')
           version: "latest"
       - uses: jetli/trunk-action@v0.4.0
         with:
-          # Optional version of trunk to install(eg. 'v0.16.0', 'latest')
           version: "latest"
       - name: Build
         working-directory: webapp
@@ -44,16 +42,10 @@ jobs:
       - name: Publish to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_KEY }}
-          accountId: 282219d344549d3c23e8448999ef4884
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUT_ID }}
           projectName: youtinerary
-          directory: webapp/dist/
-          # Optional: Enable this if you want to have GitHub Deployments triggered
+          directory: dist/
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: Switch what branch you are publishing to.
-          # By default this will be the branch which triggered this workflow
           branch: main
-          # Optional: Change the working directory
-          # workingDirectory: my-site
-          # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
-          # wranglerVersion: '3'
+          workingDirectory: webapp
