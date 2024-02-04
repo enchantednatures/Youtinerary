@@ -1,0 +1,26 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n            insert into flights (airline, confirmation_code, departure_time, arrival_time, notes)\n            values ($1, $2, $3, $4, $5)\n            returning id\n            ",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "id",
+        "type_info": "Int4"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Varchar",
+        "Varchar",
+        "Timestamptz",
+        "Timestamptz",
+        "Varchar"
+      ]
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "5af3f71b793e624a1c5ea7cdf1af14582a3aec5815857e0a6b272dff6752dfec"
+}

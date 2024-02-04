@@ -44,7 +44,8 @@ tracing-opentelemetry = "0.22"
 init-tracing-opentelemetry = { version = "0.16.0", features = [ "otlp", "tracing_subscriber_ext", ] }
 tracing-opentelemetry-instrumentation-sdk =  { version = "0.16.0" }
 opentelemetry_sdk = {version="0.21" , features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.14" , features = ["tonic"] }
+opentelemetry-otlp = { version = "0.14" , features = ["tonic", "default"] }
+
 
 [workspace.dependencies.axum]
 version = "0.7"

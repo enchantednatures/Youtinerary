@@ -30,8 +30,8 @@ opentelemetry-stdout = { workspace  = true }
 axum-tracing-opentelemetry  = { workspace  = true }
 tracing-opentelemetry-instrumentation-sdk =  { workspace  = true }
 tracing-opentelemetry = { workspace = true}
-opentelemetry_sdk = { workspace = true, features = ["rt-tokio"] }
-opentelemetry-otlp = { workspace = true, features = ["tonic"] }
+opentelemetry_sdk = { workspace = true}
+opentelemetry-otlp = { workspace = true}
 
 
 auth = { path = "../auth" }

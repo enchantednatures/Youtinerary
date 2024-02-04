@@ -10,36 +10,33 @@ use anyhow::Result;
 use auth::authorize;
 use auth::login_authorized;
 use auth::protected;
-use axum::error_handling::HandleErrorLayer;
 use axum::extract::FromRef;
-use axum::extract::MatchedPath;
-use axum::http::Method;
-use axum::http::StatusCode;
-use axum::response::Response;
 use axum::{routing::get, Router};
 use axum_tracing_opentelemetry::middleware::OtelAxumLayer;
 use axum_tracing_opentelemetry::middleware::OtelInResponseLayer;
-use axum_tracing_opentelemetry::opentelemetry_tracing_layer;
 use configuration::Settings;
+use opentelemetry::trace::TraceError;
+use opentelemetry::{KeyValue};
+use opentelemetry::trace::Tracer;
+use opentelemetry_otlp::WithExportConfig;
+use opentelemetry_sdk::metrics::reader::DefaultTemporalitySelector;
+use opentelemetry_sdk::trace;
+use opentelemetry_sdk::trace::Sampler;
+use opentelemetry_sdk::Resource;
+use std::time::Duration;
+
 pub use health_check::*;
 use hyper::body::Bytes;
 use hyper::{HeaderMap, Request};
 pub use models::*;
 use oauth2::basic::BasicClient;
-use opentelemetry::global::shutdown_tracer_provider;
-use opentelemetry::trace::TraceError;
 use opentelemetry::trace::TracerProvider as _;
-use opentelemetry::KeyValue;
-use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::runtime;
 use opentelemetry_sdk::trace as sdktrace;
-use opentelemetry_sdk::trace::TracerProvider;
-use opentelemetry_sdk::Resource;
 use opentelemetry_stdout as stdout;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
 use std::net::SocketAddr;
-use std::time::Duration;
 use tokio::time::error::Elapsed;
 use tower::BoxError;
 use tower::ServiceBuilder;
@@ -47,11 +44,15 @@ use tower_http::classify::ServerErrorsFailureClass;
 use tower_http::cors::{Any, CorsLayer};
 use tower_http::services::ServeFile;
 use tower_http::trace::TraceLayer;
-use tracing::{error, span};
-use tracing::{info_span, Span};
-use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
+use tracing::error;
+use tracing::info_span;
+use tracing::span;
+use tracing::Span;
+use tracing_bunyan_formatter::BunyanFormattingLayer;
+use tracing_bunyan_formatter::JsonStorageLayer;
 use tracing_subscriber::layer::SubscriberExt;
-use tracing_subscriber::{EnvFilter, Registry};
+use tracing_subscriber::EnvFilter;
+use tracing_subscriber::Registry;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -99,7 +100,7 @@ fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
         .with_exporter(
             opentelemetry_otlp::new_exporter()
                 .tonic()
-                .with_endpoint("http://localhost:4317"),
+                .with_endpoint("https://jaeger-collector.enchantednatures.com"),
         )
         .with_trace_config(
             sdktrace::config().with_resource(Resource::new(vec![KeyValue::new(
@@ -155,8 +156,8 @@ async fn main() -> Result<()> {
         .layer(
             ServiceBuilder::new()
                 .layer(CorsLayer::new().allow_methods(Any).allow_origin(Any))
-                // .layer(OtelInResponseLayer::default())
-                // .layer(OtelAxumLayer::default())
+                .layer(OtelInResponseLayer::default())
+                .layer(OtelAxumLayer::default())
                 .into_inner(),
         )
         // .route("", get(retrieve))
@@ -164,6 +165,6 @@ async fn main() -> Result<()> {
 
     axum::serve(listener, router).await.unwrap();
 
-    shutdown_tracer_provider();
+    opentelemetry::global::shutdown_tracer_provider();
     Ok(())
 }
