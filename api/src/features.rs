@@ -43,28 +43,27 @@ pub struct DeleteItineraryRequest {
     pub id: i32,
 }
 
-#[tracing::instrument(name = "Put Itinerary", skip(db))]
-pub async fn put_itinerary(State(db): State<PgPool>, Path(id): Path<i32>) -> impl IntoResponse {
+#[tracing::instrument(name = "Put Itinerary", skip(_db))]
+pub async fn put_itinerary(State(_db): State<PgPool>, Path(id): Path<i32>) -> impl IntoResponse {
     (StatusCode::NOT_IMPLEMENTED, "put_itinerary")
 }
 
-#[tracing::instrument(name = "Delete Itineraries", skip(db))]
-pub fn delete_itinerary(State(db): State<PgPool>, Path(id): Path<i32>) -> impl IntoResponse {
+#[tracing::instrument(name = "Delete Itineraries", skip(_db))]
+pub fn delete_itinerary(State(_db): State<PgPool>, Path(id): Path<i32>) -> impl IntoResponse {
     (StatusCode::NOT_IMPLEMENTED, "delete_itinerary")
 }
 
-#[tracing::instrument(name = "Get Itinerary Stays", skip(db))]
-
+#[tracing::instrument(name = "Get Itinerary Stays", skip(_db))]
 pub async fn get_itinerary_stays(
-    State(db): State<PgPool>,
+    State(_db): State<PgPool>,
     Path(id): Path<i32>,
 ) -> impl IntoResponse {
     (StatusCode::NOT_IMPLEMENTED, "get_itinerary_stays")
 }
 
-#[tracing::instrument(name = "Post Itinerary Stay", skip(db))]
+#[tracing::instrument(name = "Post Itinerary Stay", skip(_db))]
 pub async fn post_itinerary_stay(
-    State(db): State<PgPool>,
+    State(_db): State<PgPool>,
     Path(id): Path<i32>,
 ) -> impl IntoResponse {
     (StatusCode::NOT_IMPLEMENTED, "get_itinerary_stays")
