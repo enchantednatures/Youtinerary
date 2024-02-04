@@ -14,6 +14,7 @@ RUN USER=root cargo new --bin webapp
 
 # Copy your project's Cargo.toml and Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
+COPY ./Cargo.lock ./Cargo.lock
 COPY ./api/Cargo.toml ./api/Cargo.toml
 COPY ./auth/Cargo.toml ./auth/Cargo.toml
 
