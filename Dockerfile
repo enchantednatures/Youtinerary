@@ -25,6 +25,7 @@ RUN rm auth/src/*.rs
 # Copy your source code
 
 COPY ./.sqlx ./.sqlx
+COPY ./config/ /config
 COPY ./api/src ./api/src
 COPY ./auth/src ./auth/src
 COPY ./api/migrations ./api/migrations
