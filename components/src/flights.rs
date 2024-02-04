@@ -1,7 +1,7 @@
-use chrono::{DateTime, Utc};
+
 use leptos::*;
 use leptos_router::*;
-use serde::{Deserialize, Serialize};
+
 use models::Flight;
 
 #[component]

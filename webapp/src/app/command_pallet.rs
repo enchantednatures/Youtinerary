@@ -3,7 +3,7 @@ use leptos::leptos_dom::logging::console_log;
 
 use leptos::{html::Input, *};
 use leptos_router::{use_navigate, NavigateOptions};
-use leptos_use::{use_element_hover_with_options, UseElementHoverOptions, use_element_hover};
+
 use web_sys::MouseEvent;
 
 use components::{ShowCreateFlightSlideOutSignal, ShowItinerarySignal};

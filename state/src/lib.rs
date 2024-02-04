@@ -358,7 +358,7 @@ impl Stay {
 }
 
 impl From<&FullItinerary> for Vec<ItineraryStay> {
-    fn from(itinerary: &FullItinerary) -> Self {
+    fn from(_itinerary: &FullItinerary) -> Self {
         // itinerary.stays.iter().cloned()
         vec![]
     }
