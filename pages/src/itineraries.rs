@@ -5,10 +5,13 @@ use leptos_router::*;
 use models::Itinerary;
 use state::GlobalStateSignal;
 
-
 #[component]
 pub fn TravelOutlet() -> impl IntoView {
-    view! { <Outlet/> }
+    view! {
+        <div class="flex flex-row">
+            <Outlet/>
+        </div>
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -40,7 +43,6 @@ impl ShownItineraryOverlayContext {
     pub fn get(&self) -> Option<usize> {
         self.0.get()
     }
-
 }
 #[component]
 pub fn ItinerariesView() -> impl IntoView {
@@ -59,7 +61,7 @@ pub fn ItinerariesView() -> impl IntoView {
     };
 
     view! {
-        <ul role="list" class="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+        <ul role="list" class="flex flex-row">
             <For
 
                 each=itinerary_cards
@@ -76,11 +78,10 @@ pub fn ItinerariesView() -> impl IntoView {
 
 #[component]
 pub fn ItineraryCard(itinerary: Itinerary) -> impl IntoView {
-    // let (show_overlay, set_show_overlay) = create_signal(false);
     let shown_overlay = expect_context::<ShownItineraryOverlayContext>();
     view! {
         <div
-            class="max-w-sm w-full lg:max-w-full lg:flex"
+            class="basis-1/3 focus:basis-1/2"
             on:click=move |_| shown_overlay.set(itinerary.id)
             id=format!("itinerary-card-{}", itinerary.id)
         >
@@ -105,7 +106,7 @@ pub fn ItineraryCard(itinerary: Itinerary) -> impl IntoView {
                 </div>
             </div>
         </div>
-        <Show when=move ||Some(itinerary.id) ==  shown_overlay.get() fallback=|| ()>
+        <Show when=move || Some(itinerary.id) == shown_overlay.get() fallback=|| ()>
             <Portal mount=document()
                 .get_element_by_id(&format!("itinerary-card-{}", itinerary.id))
                 .unwrap()>

@@ -3,8 +3,6 @@ name = "api"
 version = "0.1.0"
 edition = "2021"
 
-
-
 [dependencies]
 chrono = { workspace  = true } 
 chrono-tz = { workspace  = true } 
@@ -27,6 +25,13 @@ async-session = { workspace  = true }
 redis = { workspace  = true } 
 config = { workspace  = true } 
 axum = { workspace  = true}
+opentelemetry = { workspace  = true }
+opentelemetry-stdout = { workspace  = true }
+axum-tracing-opentelemetry  = { workspace  = true }
+tracing-opentelemetry-instrumentation-sdk =  { workspace  = true }
+tracing-opentelemetry = { workspace = true}
+opentelemetry_sdk = { workspace = true, features = ["rt-tokio"] }
+opentelemetry-otlp = { workspace = true, features = ["tonic"] }
+
 
 auth = { path = "../auth" }
-
