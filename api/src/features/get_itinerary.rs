@@ -5,11 +5,11 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::Json;
 use serde::Serialize;
-use serde_json::json;
+
 use sqlx::Error;
 use sqlx::PgPool;
 
-use crate::error_handling::AppError;
+
 use crate::User;
 
 #[derive(Serialize)]
@@ -58,7 +58,7 @@ enum GetItineraryError {
     UnableToFindItinerary,
 }
 impl From<Error> for GetItineraryError {
-    fn from(value: Error) -> Self {
+    fn from(_value: Error) -> Self {
         Self::UnableToFindItinerary
     }
 }

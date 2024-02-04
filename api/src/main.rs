@@ -5,7 +5,7 @@ mod health_check;
 mod middlewares;
 mod models;
 use std::net::SocketAddr;
-use std::time::Duration;
+
 
 use anyhow::Context;
 use anyhow::Result;
@@ -19,41 +19,41 @@ use axum_tracing_opentelemetry::middleware::OtelAxumLayer;
 use axum_tracing_opentelemetry::middleware::OtelInResponseLayer;
 use configuration::Settings;
 pub use health_check::*;
-use hyper::body::Bytes;
-use hyper::HeaderMap;
-use hyper::Request;
+
+
+
 pub use models::*;
 use oauth2::basic::BasicClient;
 use opentelemetry::trace::TraceError;
 use opentelemetry::trace::Tracer;
-use opentelemetry::trace::TracerProvider as _;
+
 use opentelemetry::KeyValue;
 use opentelemetry_otlp::WithExportConfig;
-use opentelemetry_sdk::metrics::reader::DefaultTemporalitySelector;
+
 use opentelemetry_sdk::runtime;
-use opentelemetry_sdk::trace;
+
 use opentelemetry_sdk::trace as sdktrace;
-use opentelemetry_sdk::trace::Sampler;
+
 use opentelemetry_sdk::Resource;
-use opentelemetry_stdout as stdout;
+
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
-use tokio::time::error::Elapsed;
-use tower::BoxError;
+
+
 use tower::ServiceBuilder;
-use tower_http::classify::ServerErrorsFailureClass;
+
 use tower_http::cors::Any;
 use tower_http::cors::CorsLayer;
-use tower_http::services::ServeFile;
-use tower_http::trace::TraceLayer;
-use tracing::error;
-use tracing::info_span;
-use tracing::span;
-use tracing::Span;
-use tracing_bunyan_formatter::BunyanFormattingLayer;
-use tracing_bunyan_formatter::JsonStorageLayer;
+
+
+
+
+
+
+
+
 use tracing_subscriber::layer::SubscriberExt;
-use tracing_subscriber::EnvFilter;
+
 use tracing_subscriber::Registry;
 
 use self::features::itineraries_router;
@@ -160,7 +160,7 @@ async fn main() -> Result<()> {
         .layer(
             ServiceBuilder::new()
                 .layer(CorsLayer::new().allow_methods(Any).allow_origin(Any))
-                .layer(OtelInResponseLayer::default())
+                .layer(OtelInResponseLayer)
                 .layer(OtelAxumLayer::default())
                 .into_inner(),
         )

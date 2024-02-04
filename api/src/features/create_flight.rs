@@ -36,15 +36,15 @@ pub struct CreateFlightRequest {
     pub(crate) notes: String,
 }
 
-impl Into<InsertFlight> for (i32, CreateFlightRequest) {
-    fn into(self) -> InsertFlight {
+impl From<(i32, CreateFlightRequest)> for InsertFlight {
+    fn from(val: (i32, CreateFlightRequest)) -> Self {
         InsertFlight {
-            itinerary_id: self.0,
-            airline: self.1.airline,
-            confirmation_code: self.1.confirmation_code,
-            departure_time: self.1.departure_time,
-            arrival_time: self.1.arrival_time,
-            notes: self.1.notes,
+            itinerary_id: val.0,
+            airline: val.1.airline,
+            confirmation_code: val.1.confirmation_code,
+            departure_time: val.1.departure_time,
+            arrival_time: val.1.arrival_time,
+            notes: val.1.notes,
         }
     }
 }
