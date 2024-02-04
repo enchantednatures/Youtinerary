@@ -4,7 +4,9 @@ mod features;
 mod health_check;
 mod middlewares;
 mod models;
-use self::features::itineraries_router;
+use std::net::SocketAddr;
+use std::time::Duration;
+
 use anyhow::Context;
 use anyhow::Result;
 use auth::authorize;
@@ -16,29 +18,26 @@ use axum::Router;
 use axum_tracing_opentelemetry::middleware::OtelAxumLayer;
 use axum_tracing_opentelemetry::middleware::OtelInResponseLayer;
 use configuration::Settings;
-use opentelemetry::trace::TraceError;
-use opentelemetry::trace::Tracer;
-use opentelemetry::KeyValue;
-use opentelemetry_otlp::WithExportConfig;
-use opentelemetry_sdk::metrics::reader::DefaultTemporalitySelector;
-use opentelemetry_sdk::trace;
-use opentelemetry_sdk::trace::Sampler;
-use opentelemetry_sdk::Resource;
-use std::time::Duration;
-
 pub use health_check::*;
 use hyper::body::Bytes;
 use hyper::HeaderMap;
 use hyper::Request;
 pub use models::*;
 use oauth2::basic::BasicClient;
+use opentelemetry::trace::TraceError;
+use opentelemetry::trace::Tracer;
 use opentelemetry::trace::TracerProvider as _;
+use opentelemetry::KeyValue;
+use opentelemetry_otlp::WithExportConfig;
+use opentelemetry_sdk::metrics::reader::DefaultTemporalitySelector;
 use opentelemetry_sdk::runtime;
+use opentelemetry_sdk::trace;
 use opentelemetry_sdk::trace as sdktrace;
+use opentelemetry_sdk::trace::Sampler;
+use opentelemetry_sdk::Resource;
 use opentelemetry_stdout as stdout;
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
-use std::net::SocketAddr;
 use tokio::time::error::Elapsed;
 use tower::BoxError;
 use tower::ServiceBuilder;
@@ -56,6 +55,8 @@ use tracing_bunyan_formatter::JsonStorageLayer;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::EnvFilter;
 use tracing_subscriber::Registry;
+
+use self::features::itineraries_router;
 
 #[derive(Clone)]
 pub struct AppState {

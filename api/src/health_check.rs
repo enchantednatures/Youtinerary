@@ -1,9 +1,8 @@
+use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use axum::Json;
 use serde::Deserialize;
 use serde::Serialize;
-
-use axum::http::StatusCode;
-use axum::Json;
 #[derive(Serialize, Deserialize)]
 pub enum HealthStatusEnum {
     Ok,

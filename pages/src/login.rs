@@ -1,11 +1,9 @@
+use anyhow::Result;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-
-use anyhow::Result;
 use state::GlobalStateSignal;
 use state::LoggedInUser;
-
 use web_sys::MouseEvent;
 
 pub fn logout() {

@@ -1,12 +1,9 @@
+use std::collections::HashMap;
+
 use chrono::DateTime;
 use chrono::NaiveDate;
 use chrono::Utc;
 use leptos::*;
-use serde::Deserialize;
-use serde::Serialize;
-
-use std::collections::HashMap;
-
 use models::Flight;
 use models::Itinerary;
 use models::ItineraryItem;
@@ -14,6 +11,8 @@ use models::ItineraryShare;
 use models::ItineraryShareType;
 use models::ItineraryStatus;
 use models::TravelLeg;
+use serde::Deserialize;
+use serde::Serialize;
 
 pub const STORAGE_KEY: &str = "youtinerary-itineraries";
 

@@ -1,5 +1,4 @@
 use leptos::*;
-
 use state::GlobalStateSignal;
 
 #[component]

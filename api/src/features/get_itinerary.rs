@@ -1,11 +1,9 @@
+use anyhow::Result;
 use axum::extract::Path;
 use axum::extract::State;
-use axum::Json;
-
-use anyhow::Result;
-
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use axum::Json;
 use serde::Serialize;
 use serde_json::json;
 use sqlx::Error;

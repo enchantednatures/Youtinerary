@@ -1,6 +1,5 @@
 use leptos::*;
 use leptos_router::*;
-
 use models::Flight;
 
 #[component]

@@ -2,7 +2,6 @@ use chrono::Utc;
 use leptos::html::Input;
 use leptos::leptos_dom::logging::console_log;
 use leptos::*;
-
 use state::CreateItineraryRequest;
 use state::GlobalStateSignal;
 use state::STORAGE_KEY;

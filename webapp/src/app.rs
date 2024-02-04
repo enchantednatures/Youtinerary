@@ -1,15 +1,15 @@
+use std::time::Duration;
+
 use components::CreateItinerarySlideOut;
 use components::ShowItinerarySignal;
+use leptos::*;
+use leptos_meta::*;
+use leptos_router::*;
 use pages::ItinerariesView;
 use pages::ItineraryStays;
 use pages::ItineraryTravelLegs;
 use pages::ItineraryView;
 use pages::TravelOutlet;
-use std::time::Duration;
-
-use leptos::*;
-use leptos_meta::*;
-use leptos_router::*;
 
 mod auth;
 mod command_pallet;
@@ -17,7 +17,6 @@ mod icons;
 mod nav;
 
 use nav::Nav;
-
 use pages::About;
 use pages::Home;
 use pages::LogOut;
@@ -25,13 +24,11 @@ use pages::Login;
 use pages::Signup;
 
 mod header;
+use command_pallet::ShowCommandPalletSignal;
 use header::Header;
 use icons::LogoIcon;
-
 use state::GlobalState;
 use state::GlobalStateSignal;
-
-use command_pallet::ShowCommandPalletSignal;
 
 use crate::app::command_pallet::CommandPallet;
 

@@ -1,7 +1,6 @@
+use components::UserSignupForm;
 use leptos::*;
 use leptos_meta::*;
-
-use components::UserSignupForm;
 
 #[component]
 pub fn Signup() -> impl IntoView {

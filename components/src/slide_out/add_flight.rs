@@ -1,7 +1,6 @@
 use chrono::Utc;
 use leptos::html::Input;
 use leptos::*;
-
 use state::CreateFlightRequest;
 use state::GlobalStateSignal;
 

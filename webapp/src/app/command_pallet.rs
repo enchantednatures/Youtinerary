@@ -1,15 +1,12 @@
+use components::ShowCreateFlightSlideOutSignal;
+use components::ShowItinerarySignal;
+use leptos::html::Input;
 use leptos::html::Li;
 use leptos::leptos_dom::logging::console_log;
-
-use leptos::html::Input;
 use leptos::*;
 use leptos_router::use_navigate;
 use leptos_router::NavigateOptions;
-
 use web_sys::MouseEvent;
-
-use components::ShowCreateFlightSlideOutSignal;
-use components::ShowItinerarySignal;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ShowCommandPalletSignal(WriteSignal<bool>);

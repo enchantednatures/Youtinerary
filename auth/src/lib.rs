@@ -2,13 +2,22 @@ mod error;
 
 use anyhow::Context;
 use anyhow::Result;
-use error::AuthError;
-
 use async_session::Session;
+use axum::async_trait;
+use axum::extract::FromRef;
+use axum::extract::FromRequestParts;
 use axum::extract::Query;
 use axum::extract::State;
+use axum::http::header;
+use axum::http::header::SET_COOKIE;
+use axum::http::request::Parts;
+use axum::response::IntoResponse;
+use axum::response::Redirect;
+use axum::response::Response;
+use axum::RequestPartsExt;
 use axum_extra::typed_header::TypedHeaderRejectionReason;
 use axum_extra::TypedHeader;
+use error::AuthError;
 use hyper::HeaderMap;
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::async_http_client;
@@ -24,21 +33,7 @@ use oauth2::RevocationUrl;
 use oauth2::Scope;
 use oauth2::TokenResponse;
 use oauth2::TokenUrl;
-
-use axum::http::header::SET_COOKIE;
-use axum::response::IntoResponse;
-use axum::response::Redirect;
-use axum::response::Response;
-
-use axum::async_trait;
-use axum::extract::FromRef;
-use axum::extract::FromRequestParts;
-use axum::http::header;
-use axum::http::request::Parts;
-use axum::RequestPartsExt;
-
 use redis::AsyncCommands;
-
 use serde::Deserialize;
 use serde::Serialize;
 
