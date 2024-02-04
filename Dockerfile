@@ -7,6 +7,10 @@ FROM rust:1.75 as build
 WORKDIR /youtinerary
 RUN USER=root cargo new --bin api
 RUN USER=root cargo new --lib auth
+RUN USER=root cargo new --lib components 
+RUN USER=root cargo new --lib pages
+RUN USER=root cargo new --lib state
+RUN USER=root cargo new --bin webapp
 
 # Copy your project's Cargo.toml and Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
