@@ -1,11 +1,11 @@
 mod configuration;
-pub mod error_handling;
+mod error_handling;
 mod features;
 mod health_check;
 mod middlewares;
 mod models;
-use std::net::SocketAddr;
 
+use std::net::SocketAddr;
 
 use anyhow::Context;
 use anyhow::Result;
@@ -18,45 +18,23 @@ use axum::Router;
 use axum_tracing_opentelemetry::middleware::OtelAxumLayer;
 use axum_tracing_opentelemetry::middleware::OtelInResponseLayer;
 use configuration::Settings;
-pub use health_check::*;
-
-
-
-pub use models::*;
+use features::itineraries_router;
+use health_check::*;
+use models::*;
 use oauth2::basic::BasicClient;
 use opentelemetry::trace::TraceError;
-use opentelemetry::trace::Tracer;
-
 use opentelemetry::KeyValue;
 use opentelemetry_otlp::WithExportConfig;
-
 use opentelemetry_sdk::runtime;
-
 use opentelemetry_sdk::trace as sdktrace;
-
 use opentelemetry_sdk::Resource;
-
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
-
-
 use tower::ServiceBuilder;
-
 use tower_http::cors::Any;
 use tower_http::cors::CorsLayer;
-
-
-
-
-
-
-
-
 use tracing_subscriber::layer::SubscriberExt;
-
 use tracing_subscriber::Registry;
-
-use self::features::itineraries_router;
 
 #[derive(Clone)]
 pub struct AppState {
@@ -104,12 +82,12 @@ fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
         .with_exporter(
             opentelemetry_otlp::new_exporter()
                 .tonic()
-                .with_endpoint("https://jaeger-collector.enchantednatures.com"),
+                .with_endpoint("https://localhost:64849"),
         )
         .with_trace_config(
             sdktrace::config().with_resource(Resource::new(vec![KeyValue::new(
-                "youtinerary.api",
-                "tracing-jaeger",
+                "service.name",
+                "youtinerary.api"
             )])),
         )
         .install_batch(runtime::Tokio)

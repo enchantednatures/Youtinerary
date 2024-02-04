@@ -6,6 +6,7 @@ use axum::Json;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
+use tracing::Instrument;
 
 use crate::error_handling::AppError;
 use crate::User;
@@ -49,6 +50,7 @@ trait CreateItineraryRespository {
 }
 
 impl CreateItineraryRespository for PgPool {
+    #[tracing::instrument(name = "Insert Itinerary into Database", skip(self, create_itinerary))]
     async fn create_itinerary(&self, create_itinerary: InsertItinerary) -> Result<i32> {
         let inserted = sqlx::query!(
             r#"
@@ -60,6 +62,7 @@ impl CreateItineraryRespository for PgPool {
             create_itinerary.name,
         )
         .fetch_one(self)
+        .in_current_span()
         .await?;
 
         Ok(inserted.itinerary_id as i32)
