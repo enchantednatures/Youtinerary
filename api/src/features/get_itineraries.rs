@@ -28,10 +28,10 @@ impl<'a> From<&'a Itinerary> for IntinerarySummaryView<'a> {
     }
 }
 
-#[tracing::instrument(name = "Get Itineraries", skip(db))]
+#[tracing::instrument(name = "Get Itineraries", skip(_db))]
 pub async fn get_itineraries(
     user: User,
-    State(db): State<PgPool>,
+    State(_db): State<PgPool>,
 ) -> Result<impl IntoResponse, AppError> {
     // let itineraries: Vec<IntinerarySummaryView> = db
     //     .get_itineraries(user.id)
