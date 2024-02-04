@@ -26,6 +26,7 @@ RUN rm auth/src/*.rs
 
 COPY ./.sqlx ./.sqlx
 COPY ./api/src ./api/src
+COPY ./auth/src ./auth/src
 COPY ./api/migrations ./api/migrations
 
 # Build the release binary
