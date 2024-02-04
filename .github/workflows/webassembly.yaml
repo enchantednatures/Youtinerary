@@ -1,4 +1,4 @@
-name: build
+name: Youtinerary Cloudflare Pages
 on:
   workflow_dispatch:
   push:
