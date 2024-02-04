@@ -13,7 +13,6 @@ trait UserRepository {
     async fn get_user<'a>(&self, email: &'a str) -> Result<Option<User>>;
 }
 impl UserRepository for PgPool {
-
     #[tracing::instrument(name = "Get User from Database")]
     async fn get_user<'a>(&self, email: &'a str) -> Result<Option<User>> {
         let user = sqlx::query_as!(

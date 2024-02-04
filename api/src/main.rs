@@ -87,7 +87,7 @@ fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
         .with_trace_config(
             sdktrace::config().with_resource(Resource::new(vec![KeyValue::new(
                 "service.name",
-                "youtinerary.api"
+                "youtinerary.api",
             )])),
         )
         .install_batch(runtime::Tokio)
