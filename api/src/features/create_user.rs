@@ -5,7 +5,8 @@ use anyhow::Result;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::Json;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 use sqlx::PgPool;
 
 use crate::error_handling::AppError;
@@ -26,13 +27,11 @@ pub struct CreateUserRequest {
 
 impl<'a> From<&'a CreateUserRequest> for InsertUser<'a> {
     fn from(val: &'a CreateUserRequest) -> Self {
-        InsertUser {
-            email: &val.email,
-        }
+        InsertUser { email: &val.email }
     }
 }
 
-enum CreateUserError{
+enum CreateUserError {
     DuplicateUser,
 }
 

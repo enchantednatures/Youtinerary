@@ -1,10 +1,12 @@
 mod error;
 
-use anyhow::{Context, Result};
+use anyhow::Context;
+use anyhow::Result;
 use error::AuthError;
 
 use async_session::Session;
-use axum::extract::{Query, State};
+use axum::extract::Query;
+use axum::extract::State;
 use axum_extra::typed_header::TypedHeaderRejectionReason;
 use axum_extra::TypedHeader;
 use hyper::HeaderMap;

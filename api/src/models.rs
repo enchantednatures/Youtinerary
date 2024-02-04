@@ -1,8 +1,9 @@
-use serde::{Deserialize, Serialize};
-use sqlx::{
-    types::chrono::{DateTime, NaiveDate, Utc},
-    FromRow,
-};
+use serde::Deserialize;
+use serde::Serialize;
+use sqlx::types::chrono::DateTime;
+use sqlx::types::chrono::NaiveDate;
+use sqlx::types::chrono::Utc;
+use sqlx::FromRow;
 
 #[derive(Debug)]
 pub struct User {

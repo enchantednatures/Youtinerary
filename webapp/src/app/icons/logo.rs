@@ -1,4 +1,6 @@
-use leptos::{component, view, IntoView};
+use leptos::component;
+use leptos::view;
+use leptos::IntoView;
 
 #[component]
 pub fn LogoIcon() -> impl IntoView {

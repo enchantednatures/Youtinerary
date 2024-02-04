@@ -3,7 +3,6 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::Outlet;
 
-
 #[component]
 pub fn Home() -> impl IntoView {
     provide_meta_context();

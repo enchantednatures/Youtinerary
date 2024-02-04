@@ -1,6 +1,8 @@
+use chrono::DateTime;
+use chrono::NaiveDate;
 use chrono::Utc;
-use chrono::{DateTime, NaiveDate};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Itinerary {

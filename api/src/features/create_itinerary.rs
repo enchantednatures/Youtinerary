@@ -5,11 +5,12 @@ use anyhow::Result;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::Json;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 use sqlx::PgPool;
 
-use crate::User;
 use crate::error_handling::AppError;
+use crate::User;
 
 #[tracing::instrument(name = "Create Itinerary", skip(db))]
 pub async fn create_itinerary(

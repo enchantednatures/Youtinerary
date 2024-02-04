@@ -1,4 +1,5 @@
-use axum::extract::{Path, State};
+use axum::extract::Path;
+use axum::extract::State;
 use axum::Json;
 
 use anyhow::Result;
@@ -7,10 +8,11 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use serde::Serialize;
 use serde_json::json;
-use sqlx::{Error, PgPool};
+use sqlx::Error;
+use sqlx::PgPool;
 
-use crate::User;
 use crate::error_handling::AppError;
+use crate::User;
 
 #[derive(Serialize)]
 pub struct ItineraryViewModel {

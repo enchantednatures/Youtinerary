@@ -1,7 +1,6 @@
-use axum::{
-    http::StatusCode,
-    response::{Html, IntoResponse},
-};
+use axum::http::StatusCode;
+use axum::response::Html;
+use axum::response::IntoResponse;
 
 pub struct AuthError {
     code: StatusCode,
@@ -52,13 +51,11 @@ impl IntoResponse for AuthError {
     }
 }
 
-
 impl From<reqwest::Error> for AuthError {
     fn from(err: reqwest::Error) -> Self {
         AuthError::new(format!("reqwest error: {:#}", err))
     }
 }
-
 
 impl From<serde_json::Error> for AuthError {
     fn from(err: serde_json::Error) -> Self {
@@ -77,5 +74,3 @@ impl From<&str> for AuthError {
         AuthError::new(err)
     }
 }
-
-

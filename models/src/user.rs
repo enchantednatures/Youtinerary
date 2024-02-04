@@ -1,6 +1,5 @@
-
-
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 use uuid::Uuid;
 
 pub struct User {
@@ -19,4 +18,3 @@ pub struct UserSettings {
     pub user_id: Uuid,
     pub theme: Theme,
 }
-

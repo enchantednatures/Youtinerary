@@ -1,9 +1,9 @@
-use chrono::{Utc};
+use chrono::Utc;
 use leptos::html::Input;
 use leptos::*;
 
-
-use state::{GlobalStateSignal, CreateFlightRequest};
+use state::CreateFlightRequest;
+use state::GlobalStateSignal;
 
 use crate::date_picker::DateTimePicker;
 // use pages::ItineraryParams;
@@ -20,7 +20,6 @@ impl ShowCreateFlightSlideOutSignal {
         self.0.set(value);
     }
 }
-
 
 #[component]
 pub fn CreateFlightSlideOut(itinerary_id: usize) -> impl IntoView {

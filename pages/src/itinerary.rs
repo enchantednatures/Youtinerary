@@ -1,10 +1,12 @@
 use std::time::Duration;
 
 use leptos::*;
-use leptos_meta::{provide_meta_context, Title};
+use leptos_meta::provide_meta_context;
+use leptos_meta::Title;
 use leptos_router::*;
 
-use components::{CreateFlightSlideOut, ShowCreateFlightSlideOutSignal};
+use components::CreateFlightSlideOut;
+use components::ShowCreateFlightSlideOutSignal;
 use state::GlobalStateSignal;
 
 #[derive(Params, PartialEq, Eq, Clone, Debug)]

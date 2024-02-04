@@ -1,13 +1,14 @@
 use anyhow::Result;
+use auth::AuthRedirect;
+use auth::AuthentikUser;
 use axum::async_trait;
-use axum::extract::{FromRef, FromRequestParts};
+use axum::extract::FromRef;
+use axum::extract::FromRequestParts;
 use sqlx::PgPool;
-use auth::{AuthRedirect, AuthentikUser};
 
 use axum::http::request::Parts;
 
 use crate::User;
-
 
 trait UserRepository {
     async fn get_user<'a>(&self, email: &'a str) -> Result<Option<User>>;

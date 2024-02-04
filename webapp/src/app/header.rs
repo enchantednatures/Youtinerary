@@ -2,7 +2,8 @@ use components::Divider;
 use components::UserIcon;
 use leptos::*;
 use leptos_router::Form;
-use web_sys::{FocusEvent, KeyboardEvent};
+use web_sys::FocusEvent;
+use web_sys::KeyboardEvent;
 
 use crate::app::ShowCommandPalletSignal;
 

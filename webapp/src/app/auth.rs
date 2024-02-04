@@ -57,9 +57,8 @@
 //     let store = use_session_storage(COOKIE_NAME);
 //     let auth_settings = expect_context::<AuthSettings>();
 //     let oauth_client = BasicClient::try_from(auth_settings).unwrap();
-//     // let client = 
+//     // let client =
 //     let AuthRequest { code, state } = query;
-
 
 //     let state = CsrfToken::new(state);
 //     let code = AuthorizationCode::new(code);

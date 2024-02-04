@@ -1,5 +1,6 @@
 use axum::response::IntoResponse;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 
 use axum::http::StatusCode;
 use axum::Json;

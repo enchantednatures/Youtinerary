@@ -10,14 +10,18 @@ use create_itinerary::create_itinerary;
 use get_itineraries::get_itineraries;
 use get_itinerary::get_itinerary;
 
-use axum::extract::{Path, State};
+use axum::extract::Path;
+use axum::extract::State;
 
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use axum::routing::get;
 use axum::routing::post;
-use axum::{routing::get, Router};
-use serde::{Deserialize, Serialize};
-use sqlx::{types::chrono::NaiveDate, PgPool};
+use axum::Router;
+use serde::Deserialize;
+use serde::Serialize;
+use sqlx::types::chrono::NaiveDate;
+use sqlx::PgPool;
 
 use crate::AppState;
 

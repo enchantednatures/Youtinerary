@@ -1,7 +1,7 @@
 use anyhow::Result;
-use serde::{Deserialize, Serialize};
 use auth::AuthSettings;
-
+use serde::Deserialize;
+use serde::Serialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Settings {

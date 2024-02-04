@@ -1,11 +1,19 @@
-use chrono::{DateTime, NaiveDate, Utc};
+use chrono::DateTime;
+use chrono::NaiveDate;
+use chrono::Utc;
 use leptos::*;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
+use serde::Serialize;
 
 use std::collections::HashMap;
 
-use models::{Flight, Itinerary, ItineraryShareType};
-use models::{ItineraryItem, ItineraryShare, ItineraryStatus, TravelLeg};
+use models::Flight;
+use models::Itinerary;
+use models::ItineraryItem;
+use models::ItineraryShare;
+use models::ItineraryShareType;
+use models::ItineraryStatus;
+use models::TravelLeg;
 
 pub const STORAGE_KEY: &str = "youtinerary-itineraries";
 
@@ -25,9 +33,9 @@ pub struct GlobalState {
     pub itineraries: Itineraries,
 }
 
-struct It<'a>(usize,&'a FullItinerary);
+struct It<'a>(usize, &'a FullItinerary);
 
-impl <'a> From<It<'a>> for Itinerary {
+impl<'a> From<It<'a>> for Itinerary {
     fn from(It(id, value): It<'a>) -> Self {
         Self {
             id,
@@ -285,8 +293,6 @@ impl FullItinerary {
         }
     }
 }
-
-
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ItineraryViewModel {

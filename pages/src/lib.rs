@@ -7,7 +7,7 @@ mod signup;
 
 pub use about::About;
 pub use home::*;
-pub use itinerary::*;
 pub use itineraries::*;
+pub use itinerary::*;
 pub use login::*;
 pub use signup::*;

@@ -2,7 +2,9 @@ use leptos::*;
 use leptos_router::*;
 use state::GlobalStateSignal;
 
-use crate::app::icons::{AboutIcon, HomeIcon, SettingsIcon};
+use crate::app::icons::AboutIcon;
+use crate::app::icons::HomeIcon;
+use crate::app::icons::SettingsIcon;
 
 #[component]
 fn NavElement(name: String, link: String, children: Children) -> impl IntoView {

@@ -1,9 +1,9 @@
-use pages::ItineraryTravelLegs;
-use pages::ItineraryView;
-use pages::ItineraryStays;
-use pages::ItinerariesView;
 use components::CreateItinerarySlideOut;
 use components::ShowItinerarySignal;
+use pages::ItinerariesView;
+use pages::ItineraryStays;
+use pages::ItineraryTravelLegs;
+use pages::ItineraryView;
 use pages::TravelOutlet;
 use std::time::Duration;
 
@@ -18,12 +18,15 @@ mod nav;
 
 use nav::Nav;
 
-use pages::{About, Home, LogOut, Login, Signup};
+use pages::About;
+use pages::Home;
+use pages::LogOut;
+use pages::Login;
+use pages::Signup;
 
 mod header;
 use header::Header;
 use icons::LogoIcon;
-
 
 use state::GlobalState;
 use state::GlobalStateSignal;

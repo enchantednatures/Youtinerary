@@ -1,4 +1,5 @@
-use leptos::{leptos_dom::logging::console_log, *};
+use leptos::leptos_dom::logging::console_log;
+use leptos::*;
 use leptos_use::watch_debounced;
 
 #[component]
