@@ -14,7 +14,7 @@ COPY ./api/Cargo.toml ./api/Cargo.toml
 COPY ./auth/Cargo.toml ./auth/Cargo.toml
 
 # Cache dependencies
-RUN cargo build --release
+RUN cargo build --bin api --release
 RUN rm api/src/*.rs
 RUN rm auth/src/*.rs
 
