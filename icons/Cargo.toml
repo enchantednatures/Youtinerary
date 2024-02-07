@@ -1,8 +1,9 @@
 [package]
-name = "pages"
+name = "icons"
 version = "0.1.0"
 edition = "2021"
 
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 leptos = {workspace = true } 
@@ -22,10 +23,4 @@ serde_json = {workspace = true }
 chrono-tz = {workspace = true } 
 chrono = {workspace = true } 
 itertools = {workspace = true } 
-reqwest = {workspace = true } 
 anyhow = {workspace = true } 
-oauth2 = {workspace = true }
-
-components = { path = "../components" }
-state= { path = "../state" }
-models= { path = "../models" }

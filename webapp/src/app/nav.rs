@@ -1,10 +1,14 @@
+use icons::AboutIcon;
+use icons::HomeIcon;
+use icons::SettingsIcon;
 use leptos::*;
 use leptos_router::*;
+use oauth2::basic::BasicClient;
+use oauth2::CsrfToken;
+use oauth2::PkceCodeChallenge;
+use oauth2::Scope;
+use pages::Oath2State;
 use state::GlobalStateSignal;
-
-use crate::app::icons::AboutIcon;
-use crate::app::icons::HomeIcon;
-use crate::app::icons::SettingsIcon;
 
 #[component]
 fn NavElement(name: String, link: String, children: Children) -> impl IntoView {
@@ -20,8 +24,36 @@ fn NavElement(name: String, link: String, children: Children) -> impl IntoView {
 }
 
 #[component]
+fn LoginNavElement(name: String, children: Children) -> impl IntoView {
+    let link = "";
+    view! {
+        <A
+            href=link
+            class="text-stone-200 hover:text-white hover:bg-stone-700 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+        >
+            {children()}
+            {name}
+        </A>
+    }
+}
+
+#[component]
 pub fn Nav() -> impl IntoView {
     let state = expect_context::<GlobalStateSignal>();
+    let auth_client = expect_context::<BasicClient>();
+
+    let (pkce_code_challenge, pkce_code_verifier) = PkceCodeChallenge::new_random_sha256();
+    let auth_state = Oath2State { pkce_code_verifier_secret: pkce_code_verifier.secret().clone(), return_url: "".to_string() };
+
+    provide_context(auth_state);
+
+    let (auth_url, _csrf_token) = auth_client
+        .authorize_url(CsrfToken::new_random)
+        .add_scope(Scope::new("identify".to_string()))
+        .add_scope(Scope::new("email".to_string()))
+        .add_scope(Scope::new("openid".to_string()))
+        .set_pkce_challenge(pkce_code_challenge)
+        .url();
 
     view! {
         <nav class="flex flex-1 flex-col">
@@ -45,7 +77,7 @@ pub fn Nav() -> impl IntoView {
                                 </NavElement>
                             </li>
                             <li>
-                                <NavElement name="Login".to_string() link="/login".into()>
+                                <NavElement name="Login".to_string() link=auth_url.to_string()>
                                     <AboutIcon/>
                                 </NavElement>
                             </li>

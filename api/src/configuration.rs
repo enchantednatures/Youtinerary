@@ -1,5 +1,5 @@
 use anyhow::Result;
-use auth::AuthSettings;
+use auth_config::AuthSettings;
 use serde::Deserialize;
 use serde::Serialize;
 

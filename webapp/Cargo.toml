@@ -23,7 +23,11 @@ chrono = {workspace = true }
 itertools = {workspace = true } 
 reqwest = {workspace = true } 
 anyhow = {workspace = true } 
+oauth2 = {workspace = true } 
+config = {workspace = true } 
 
-pages= { path = "../pages" }
-state= { path = "../state" }
-components= { path = "../components" }
+pages = { path = "../pages" }
+state = { path = "../state" }
+components = { path = "../components" }
+icons = { path = "../icons" }
+auth-config = { path = "../auth-config" }

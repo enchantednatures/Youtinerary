@@ -1,8 +1,8 @@
 mod error;
 
-use anyhow::Context;
 use anyhow::Result;
 use async_session::Session;
+use auth_config::COOKIE_NAME;
 use axum::async_trait;
 use axum::extract::FromRef;
 use axum::extract::FromRequestParts;
@@ -21,33 +21,15 @@ use error::AuthError;
 use hyper::HeaderMap;
 use oauth2::basic::BasicClient;
 use oauth2::reqwest::async_http_client;
-use oauth2::AuthUrl;
 use oauth2::AuthorizationCode;
-use oauth2::ClientId;
 use oauth2::CsrfToken;
-use oauth2::IntrospectionUrl;
 use oauth2::PkceCodeChallenge;
 use oauth2::PkceCodeVerifier;
-use oauth2::RedirectUrl;
-use oauth2::RevocationUrl;
 use oauth2::Scope;
 use oauth2::TokenResponse;
-use oauth2::TokenUrl;
 use redis::AsyncCommands;
 use serde::Deserialize;
 use serde::Serialize;
-
-static COOKIE_NAME: &str = "SESSION";
-
-#[derive(Debug, Deserialize)]
-pub struct AuthSettings {
-    pub client_id: String,
-    pub redirect_url: String,
-    pub token_url: String,
-    pub auth_url: String,
-    pub introspection_url: String,
-    pub revocation_url: String,
-}
 
 #[derive(Serialize, Deserialize)]
 struct Oath2State {
@@ -260,27 +242,4 @@ pub async fn authorize(
 
     tracing::info!("User data retrieved, creating session");
     Redirect::to(auth_url.as_str())
-}
-
-impl TryFrom<AuthSettings> for BasicClient {
-    type Error = anyhow::Error;
-
-    fn try_from(auth_settings: AuthSettings) -> Result<Self> {
-        Ok(BasicClient::new(
-            ClientId::new(auth_settings.client_id),
-            None,
-            AuthUrl::new(auth_settings.auth_url)
-                .context("failed to create new authorization server URL")?,
-            Some(
-                TokenUrl::new(auth_settings.token_url)
-                    .context("failed to create new token endpoint URL")?,
-            ),
-        )
-        .set_revocation_uri(RevocationUrl::new(auth_settings.revocation_url)?)
-        .set_introspection_uri(IntrospectionUrl::new(auth_settings.introspection_url)?)
-        .set_redirect_uri(
-            RedirectUrl::new(auth_settings.redirect_url)
-                .context("failed to create new redirection URL")?,
-        ))
-    }
 }
