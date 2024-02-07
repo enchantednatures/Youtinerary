@@ -1,51 +1,51 @@
 use std::time::Duration;
 
+use auth_config::AuthSettings;
 use components::CreateItinerarySlideOut;
 use components::ShowItinerarySignal;
+use icons::LogoIcon;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
+use pages::Authorize;
 use pages::ItinerariesView;
 use pages::ItineraryStays;
 use pages::ItineraryTravelLegs;
 use pages::ItineraryView;
 use pages::TravelOutlet;
 
-mod auth;
 mod command_pallet;
-mod icons;
 mod nav;
 
 use nav::Nav;
 use pages::About;
 use pages::Home;
 use pages::LogOut;
-use pages::Login;
 use pages::Signup;
 
 mod header;
 use command_pallet::ShowCommandPalletSignal;
 use header::Header;
-use icons::LogoIcon;
+use oauth2::basic::BasicClient;
 use state::GlobalState;
-use state::GlobalStateSignal;
 
 use crate::app::command_pallet::CommandPallet;
-
-pub fn is_logged_in() -> bool {
-    let state = expect_context::<GlobalStateSignal>();
-    state.with(|s| s.user.is_some())
-}
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
+
     let show_command_pallet = create_rw_signal(false);
 
     let show_itinerary = create_rw_signal(false);
     let state = create_rw_signal(GlobalState::default());
+    let auth_settings = AuthSettings {
+    };
+    let auth_client: BasicClient = auth_settings.try_into().expect("no auth client");
 
     provide_context(state);
+    provide_context(reqwest::Client::new());
+    provide_context(auth_client);
     provide_context(ShowItinerarySignal::new(show_itinerary));
     provide_context(ShowCommandPalletSignal::new(
         show_command_pallet.write_only(),
@@ -63,7 +63,7 @@ pub fn App() -> impl IntoView {
                             <LogoIcon/>
                         </div>
 
-                        <Nav/>
+                        <Nav />
                     </div>
                 </div>
 
@@ -72,12 +72,8 @@ pub fn App() -> impl IntoView {
                     <main class="py-10">
                         <AnimatedShow
                             when=show_command_pallet
-                            // optional CSS class which will be applied if `when == true`
                             show_class="ease-out duration-900 opacity-100"
-                            // optional CSS class which will be applied if `when == false` and before the
-                            // `hide_delay` starts -> makes CSS unmount animations really easy
                             hide_class="ease-in duration-300 opacity-0"
-                            // the given unmount delay which should match your unmount animation duration
                             hide_delay=Duration::from_millis(300)
                         >
                             <CommandPallet/>
@@ -85,12 +81,8 @@ pub fn App() -> impl IntoView {
 
                         <AnimatedShow
                             when=show_itinerary
-                            // optional CSS class which will be applied if `when == true`
                             show_class="ease-out duration-900 opacity-100"
-                            // optional CSS class which will be applied if `when == false` and before the
-                            // `hide_delay` starts -> makes CSS unmount animations really easy
                             hide_class="ease-in duration-300 opacity-0"
-                            // the given unmount delay which should match your unmount animation duration
                             hide_delay=Duration::from_millis(300)
                         >
                             <CreateItinerarySlideOut/>
@@ -98,10 +90,10 @@ pub fn App() -> impl IntoView {
                         <Routes>
                             <Route path="/" view=Home/>
                             <Route path="/about" view=About/>
-                            <Route path="/login" view=Login/>
+                            <Route path="/authorized" view=Authorize/>
                             <Route path="/logout" view=LogOut/>
                             <Route path="/signup" view=Signup/>
-                            // <Route path="/itineraries" view=ItinerariesView/>
+
                             <Route path="/itineraries" view=TravelOutlet>
                                 <ItineraryInfoRoutes/>
                                 <Route path="" view=ItinerariesView/>
