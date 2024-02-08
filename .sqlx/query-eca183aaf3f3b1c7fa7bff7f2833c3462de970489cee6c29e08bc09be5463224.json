@@ -16,12 +16,12 @@
       {
         "ordinal": 2,
         "name": "user_id",
-        "type_info": "Int4"
+        "type_info": "Uuid"
       }
     ],
     "parameters": {
       "Left": [
-        "Int4"
+        "Uuid"
       ]
     },
     "nullable": [
