@@ -1,14 +1,14 @@
 mod configuration;
-mod error_handling;
-mod features;
+mod database;
 mod health_check;
-mod middlewares;
-mod models;
+mod logging;
 
 use std::net::SocketAddr;
 
 use anyhow::Context;
 use anyhow::Result;
+use api_core::AppState;
+use api_features::itineraries_router;
 use auth::authorize;
 use auth::login_authorized;
 use auth::protected;
@@ -18,9 +18,9 @@ use axum::Router;
 use axum_tracing_opentelemetry::middleware::OtelAxumLayer;
 use axum_tracing_opentelemetry::middleware::OtelInResponseLayer;
 use configuration::Settings;
-use features::itineraries_router;
+use database::connect_database;
 use health_check::*;
-use models::*;
+use logging::init_tracer;
 use oauth2::basic::BasicClient;
 use opentelemetry::trace::TraceError;
 use opentelemetry::KeyValue;
@@ -36,70 +36,12 @@ use tower_http::cors::CorsLayer;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::Registry;
 
-#[derive(Clone)]
-pub struct AppState {
-    pool: PgPool,
-    redis: redis::Client,
-    oauth_client: BasicClient,
-    reqwest_client: reqwest::Client,
-}
-
-impl FromRef<AppState> for redis::Client {
-    fn from_ref(state: &AppState) -> Self {
-        state.redis.clone()
-    }
-}
-
-impl FromRef<AppState> for reqwest::Client {
-    fn from_ref(state: &AppState) -> Self {
-        state.reqwest_client.clone()
-    }
-}
-
-impl FromRef<AppState> for PgPool {
-    fn from_ref(state: &AppState) -> Self {
-        state.pool.clone()
-    }
-}
-
-impl FromRef<AppState> for BasicClient {
-    fn from_ref(state: &AppState) -> Self {
-        state.oauth_client.clone()
-    }
-}
-
-async fn connect_database(database_url: &str) -> PgPool {
-    PgPoolOptions::new()
-        .max_connections(5)
-        .connect(database_url)
-        .await
-        .expect("can't connect to database")
-}
-
-fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
-    opentelemetry_otlp::new_pipeline()
-        .tracing()
-        .with_exporter(
-            opentelemetry_otlp::new_exporter()
-                .tonic()
-                .with_endpoint("https://localhost:64849"),
-        )
-        .with_trace_config(
-            sdktrace::config().with_resource(Resource::new(vec![KeyValue::new(
-                "service.name",
-                "youtinerary.api",
-            )])),
-        )
-        .install_batch(runtime::Tokio)
-}
-
 #[tokio::main]
 async fn main() -> Result<()> {
     let tracer = init_tracer()?;
 
     // Create a tracing layer with the configured tracer
     let telemetry = tracing_opentelemetry::layer().with_tracer(tracer);
-
     // Use the tracing subscriber `Registry`, or any other subscriber
     // that impls `LookupSpan`
     let subscriber = Registry::default().with(telemetry);
@@ -113,12 +55,12 @@ async fn main() -> Result<()> {
     let redis = redis::Client::open(std::env::var("REDIS_URL")?).unwrap();
     sqlx::migrate!().run(&pool).await?;
 
-    let state = AppState {
+    let state = AppState::new(
         pool,
         redis,
-        oauth_client: settings.auth_settings.try_into()?,
-        reqwest_client: reqwest::Client::new(),
-    };
+        settings.auth_settings.try_into()?,
+        reqwest::Client::new(),
+    );
 
     let listener = tokio::net::TcpListener::bind(SocketAddr::from((
         settings.app_settings.addr,

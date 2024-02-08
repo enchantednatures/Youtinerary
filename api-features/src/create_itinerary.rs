@@ -1,4 +1,6 @@
 use anyhow::Result;
+use api_core::User;
+use api_core::error_handling::AppError;
 use axum::extract::State;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
@@ -7,9 +9,6 @@ use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
 use tracing::Instrument;
-
-use crate::error_handling::AppError;
-use crate::User;
 
 #[tracing::instrument(name = "Create Itinerary", skip(db))]
 pub async fn create_itinerary(

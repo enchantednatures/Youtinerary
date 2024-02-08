@@ -1,4 +1,6 @@
 use anyhow::Result;
+use api_core::error_handling::AppError;
+use api_core::User;
 use axum::extract::State;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
@@ -6,9 +8,6 @@ use axum::Json;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
-
-use crate::error_handling::AppError;
-use crate::User;
 
 #[derive(Serialize, Deserialize)]
 struct IntinerarySummaryView<'a> {

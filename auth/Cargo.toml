@@ -28,4 +28,4 @@ async-session = { workspace = true }
 redis = { workspace = true }
 config = { workspace = true }
 axum = { workspace = true }
-
+uuid = { workspace = true }

@@ -7,8 +7,6 @@ use axum::extract::FromRequestParts;
 use axum::http::request::Parts;
 use sqlx::PgPool;
 
-use crate::User;
-
 trait UserRepository {
     async fn get_user<'a>(&self, email: &'a str) -> Result<Option<User>>;
 }
@@ -30,6 +28,12 @@ impl UserRepository for PgPool {
 
         Ok(Some(user))
     }
+}
+
+#[derive(Debug)]
+pub struct User {
+    pub id: i32,
+    pub email: String,
 }
 
 #[async_trait]

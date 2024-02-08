@@ -1,7 +1,9 @@
 [package]
-name = "api"
+name = "api-features"
 version = "0.1.0"
 edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 chrono = { workspace  = true } 
@@ -25,15 +27,8 @@ async-session = { workspace  = true }
 redis = { workspace  = true } 
 config = { workspace  = true } 
 axum = { workspace  = true}
-opentelemetry = { workspace  = true }
-opentelemetry-stdout = { workspace  = true }
-axum-tracing-opentelemetry  = { workspace  = true }
-tracing-opentelemetry-instrumentation-sdk =  { workspace  = true }
-tracing-opentelemetry = { workspace = true}
-opentelemetry_sdk = { workspace = true}
-opentelemetry-otlp = { workspace = true}
-
 
 auth = { path = "../auth" }
-api-features = { path = "../api-features" }
+models = { path = "../models" }
+api-models = { path = "../api-models" }
 api-core = { path = "../api-core" }

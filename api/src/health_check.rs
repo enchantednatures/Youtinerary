@@ -3,6 +3,7 @@ use axum::response::IntoResponse;
 use axum::Json;
 use serde::Deserialize;
 use serde::Serialize;
+
 #[derive(Serialize, Deserialize)]
 pub enum HealthStatusEnum {
     Ok,

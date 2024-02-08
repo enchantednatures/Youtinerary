@@ -5,11 +5,7 @@ use sqlx::types::chrono::NaiveDate;
 use sqlx::types::chrono::Utc;
 use sqlx::FromRow;
 
-#[derive(Debug)]
-pub struct User {
-    pub id: i32,
-    pub email: String,
-}
+
 
 #[derive(sqlx::Type, Serialize, Deserialize)]
 #[sqlx(type_name = "itinerary_status", rename_all = "lowercase")]

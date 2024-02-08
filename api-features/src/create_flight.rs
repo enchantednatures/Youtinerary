@@ -10,7 +10,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
 
-use crate::error_handling::AppError;
+use api_core::error_handling::AppError;
 
 #[tracing::instrument(name = "Create Flight", skip(db))]
 pub async fn create_flight(

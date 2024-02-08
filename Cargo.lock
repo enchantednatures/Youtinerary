@@ -82,6 +82,8 @@ name = "api"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "api-core",
+ "api-features",
  "async-session",
  "auth",
  "axum 0.7.4",
@@ -110,6 +112,71 @@ dependencies = [
  "tracing-opentelemetry",
  "tracing-opentelemetry-instrumentation-sdk",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "api-core"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "api-models",
+ "auth",
+ "axum 0.7.4",
+ "axum-extra",
+ "chrono",
+ "chrono-tz",
+ "headers",
+ "hyper 1.1.0",
+ "models",
+ "oauth2",
+ "redis",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+]
+
+[[package]]
+name = "api-features"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "api-core",
+ "api-models",
+ "async-session",
+ "auth",
+ "axum 0.7.4",
+ "axum-extra",
+ "chrono",
+ "chrono-tz",
+ "config 0.14.0",
+ "headers",
+ "hyper 1.1.0",
+ "models",
+ "oauth2",
+ "redis",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "sqlx",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-bunyan-formatter",
+ "tracing-subscriber",
+]
+
+[[package]]
+name = "api-models"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "sqlx",
 ]
 
 [[package]]
@@ -248,6 +315,7 @@ dependencies = [
  "tracing",
  "tracing-bunyan-formatter",
  "tracing-subscriber",
+ "uuid",
 ]
 
 [[package]]
@@ -2176,7 +2244,6 @@ version = "0.1.0"
 dependencies = [
  "chrono",
  "serde",
- "uuid",
 ]
 
 [[package]]

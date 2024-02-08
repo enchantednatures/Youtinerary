@@ -21,7 +21,7 @@ use serde::Serialize;
 use sqlx::types::chrono::NaiveDate;
 use sqlx::PgPool;
 
-use crate::AppState;
+use api_core::AppState;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateItineraryRequest {

@@ -36,6 +36,7 @@ use oauth2::TokenUrl;
 use redis::AsyncCommands;
 use serde::Deserialize;
 use serde::Serialize;
+use uuid::Uuid;
 
 static COOKIE_NAME: &str = "SESSION";
 
@@ -104,7 +105,13 @@ pub struct AuthRequest {
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct AuthentikUser {
     pub email: String,
-    pub sub: String,
+    pub sub: Uuid,
+    pub email_verified: bool,
+    pub name: String,
+    pub given_name: String,
+    pub preferred_username: String,
+    pub nickname: String,
+    pub groups: Vec<String>,
 }
 
 pub struct AuthRedirect;
