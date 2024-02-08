@@ -1,6 +1,6 @@
 use anyhow::Result;
 use api_core::error_handling::AppError;
-use api_core::User;
+use auth::AuthentikUser;
 use axum::extract::State;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
@@ -8,6 +8,7 @@ use axum::Json;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
+use uuid::Uuid;
 
 #[derive(Serialize, Deserialize)]
 struct IntinerarySummaryView<'a> {
@@ -26,7 +27,7 @@ impl<'a> From<&'a Itinerary> for IntinerarySummaryView<'a> {
 
 #[tracing::instrument(name = "Get Itineraries", skip(_db))]
 pub async fn get_itineraries(
-    user: User,
+    user: AuthentikUser,
     State(_db): State<PgPool>,
 ) -> Result<impl IntoResponse, AppError> {
     // let itineraries: Vec<IntinerarySummaryView> = db
@@ -45,11 +46,11 @@ pub async fn get_itineraries(
 }
 
 trait GetItineraryRespository {
-    async fn get_itineraries(&self, user_id: i32) -> Result<Vec<Itinerary>>;
+    async fn get_itineraries(&self, user_id: Uuid) -> Result<Vec<Itinerary>>;
 }
 
 impl GetItineraryRespository for PgPool {
-    async fn get_itineraries(&self, user_id: i32) -> Result<Vec<Itinerary>> {
+    async fn get_itineraries(&self, user_id: Uuid) -> Result<Vec<Itinerary>> {
         let itineraries = sqlx::query_as!(
             Itinerary,
             r#"
@@ -72,5 +73,5 @@ impl GetItineraryRespository for PgPool {
 pub struct Itinerary {
     pub id: i32,
     pub name: String,
-    pub user_id: i32,
+    pub user_id: Uuid,
 }

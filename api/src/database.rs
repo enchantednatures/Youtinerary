@@ -1,28 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 use sqlx::postgres::PgPoolOptions;
 use sqlx::PgPool;
-
-
-
-
-
 
 pub(crate) async fn connect_database(database_url: &str) -> PgPool {
     PgPoolOptions::new()

@@ -5,26 +5,12 @@ create type travel_leg_type as enum (
     'flight', 'train', 'bus', 'car', 'ferry', 'other'
 );
 
--- create type 
-create table users
-(
-    user_id serial not null
-    constraint users_pk primary key,
-    email varchar(255) not null,
-    created_at timestamp default now() not null,
-    updated_at timestamp default now() not null
-);
-
-
 create table itineraries
 (
     itinerary_id serial not null
     constraint itineraries_pk
     primary key,
-    user_id integer not null
-    constraint itineraries_users_id_fk
-    references users
-    on update cascade on delete cascade,
+    user_id uuid not null,
     name varchar(255) not null,
     created_at timestamp default now() not null,
     updated_at timestamp default now() not null
@@ -55,10 +41,7 @@ create table itinerary_shares
     constraint itinerary_shares_itineraries_id_fk
     references itineraries
     on update cascade on delete cascade,
-    user_id integer not null
-    constraint itinerary_shares_users_id_fk
-    references users
-    on update cascade on delete cascade,
+    user_id uuid not null,
     share_type itinerary_share_type not null,
     share_message varchar(255) not null
 );

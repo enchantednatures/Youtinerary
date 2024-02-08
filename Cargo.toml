@@ -4,6 +4,7 @@ members = [ "api", "api-core", "api-features", "api-models","auth", "components"
 
 [profile.dev]
 opt-level = 1 
+split-debuginfo = "unpacked"
 
 [profile.dev.package.sqlx-macros]
 opt-level = 3
@@ -30,7 +31,6 @@ reqwest = {version = "0.11", features = ["json"]}
 anyhow = "1.0"
 sqlx = { version = "0.7", features = ["runtime-tokio-native-tls", "postgres",  "chrono", "uuid" ] }
 tokio = {version="1.35", features = ["rt-multi-thread"]}
-tracing-bunyan-formatter = "0.3"
 hyper = { version = "1", features = ["server"] }
 axum-extra = { version="0.9",  features = ["typed-header"] }
 tower = { version = "0.4", features = ["util"] }

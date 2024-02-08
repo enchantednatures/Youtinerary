@@ -1,5 +1,5 @@
 use anyhow::Result;
-use api_core::User;
+use auth::AuthentikUser;
 use axum::extract::Path;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -8,6 +8,7 @@ use axum::Json;
 use serde::Serialize;
 use sqlx::Error;
 use sqlx::PgPool;
+use uuid::Uuid;
 
 #[derive(Serialize)]
 pub struct ItineraryViewModel {
@@ -28,11 +29,11 @@ struct ErrorMessage {
 
 #[tracing::instrument(name = "Get Itinerary", skip(db))]
 pub async fn get_itinerary(
-    user: User,
+    user: AuthentikUser,
     Path(itinerary_id): Path<i32>,
     State(db): State<PgPool>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    match db.get_itinerary(user.id, itinerary_id).await {
+    match db.get_itinerary(user.sub, itinerary_id).await {
         Ok(itinerary) => {
             let itinerary_view_model = ItineraryViewModel::from(itinerary);
             return Ok((StatusCode::OK, Json(itinerary_view_model)));
@@ -46,7 +47,7 @@ pub async fn get_itinerary(
 trait GetItineraryRespository {
     async fn get_itinerary(
         &self,
-        user_id: i32,
+        user_id: Uuid,
         itinerary_id: i32,
     ) -> Result<Itinerary, GetItineraryError>;
 }
@@ -63,7 +64,7 @@ impl From<Error> for GetItineraryError {
 impl GetItineraryRespository for PgPool {
     async fn get_itinerary(
         &self,
-        user_id: i32,
+        user_id: Uuid,
         itinerary_id: i32,
     ) -> Result<Itinerary, GetItineraryError> {
         let itinerary = sqlx::query_as!(
@@ -91,5 +92,5 @@ impl GetItineraryRespository for PgPool {
 pub struct Itinerary {
     pub id: i32,
     pub name: String,
-    pub user_id: i32,
+    pub user_id: Uuid,
 }

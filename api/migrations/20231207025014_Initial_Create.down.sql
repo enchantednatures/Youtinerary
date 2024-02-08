@@ -1,7 +1,5 @@
 begin transaction;
 
-drop table if exists users cascade;
-
 drop table if exists itineraries cascade;
 drop table if exists itinerary_start_date cascade;
 drop table if exists itinerary_end_date cascade;

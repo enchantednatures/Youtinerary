@@ -1,10 +1,12 @@
 mod create_flight;
 mod create_itinerary;
 mod create_stay;
-mod create_user;
+mod delete_itinerary;
 mod get_itineraries;
 mod get_itinerary;
+mod update_itinerary;
 
+use api_core::AppState;
 use axum::extract::Path;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -14,14 +16,14 @@ use axum::routing::post;
 use axum::Router;
 use create_flight::create_flight;
 use create_itinerary::create_itinerary;
+use delete_itinerary::delete_itinerary;
 use get_itineraries::get_itineraries;
 use get_itinerary::get_itinerary;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::types::chrono::NaiveDate;
 use sqlx::PgPool;
-
-use api_core::AppState;
+use update_itinerary::put_itinerary;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct CreateItineraryRequest {
@@ -36,21 +38,6 @@ pub struct UpdateItineraryRequest {
     pub name: Option<String>,
     pub start_date: Option<NaiveDate>,
     pub end_date: Option<NaiveDate>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct DeleteItineraryRequest {
-    pub id: i32,
-}
-
-#[tracing::instrument(name = "Put Itinerary", skip(_db))]
-pub async fn put_itinerary(State(_db): State<PgPool>, Path(id): Path<i32>) -> impl IntoResponse {
-    (StatusCode::NOT_IMPLEMENTED, "put_itinerary")
-}
-
-#[tracing::instrument(name = "Delete Itineraries", skip(_db))]
-pub fn delete_itinerary(State(_db): State<PgPool>, Path(id): Path<i32>) -> impl IntoResponse {
-    (StatusCode::NOT_IMPLEMENTED, "delete_itinerary")
 }
 
 #[tracing::instrument(name = "Get Itinerary Stays", skip(_db))]

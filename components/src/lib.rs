@@ -6,6 +6,7 @@ mod forms;
 mod slide_out;
 mod user_icon;
 mod user_signup;
+mod cards;
 
 pub use calendar::*;
 pub use date_picker::*;
