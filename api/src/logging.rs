@@ -1,28 +1,10 @@
-
 use anyhow::Result;
-
-
-
-
-
-
-
-
-
-
 use opentelemetry::trace::TraceError;
 use opentelemetry::KeyValue;
 use opentelemetry_otlp::WithExportConfig;
 use opentelemetry_sdk::runtime;
 use opentelemetry_sdk::trace as sdktrace;
 use opentelemetry_sdk::Resource;
-
-
-
-
-
-
-
 
 pub(crate) fn init_tracer() -> Result<opentelemetry_sdk::trace::Tracer, TraceError> {
     opentelemetry_otlp::new_pipeline()

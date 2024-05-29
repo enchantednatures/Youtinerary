@@ -8,8 +8,8 @@ use axum::Json;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
-use uuid::Uuid;
 use tracing::Instrument;
+use uuid::Uuid;
 
 #[tracing::instrument(name = "Create Itinerary", skip(db))]
 pub async fn create_itinerary(

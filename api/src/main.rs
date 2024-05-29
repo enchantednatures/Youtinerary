@@ -12,7 +12,6 @@ use api_features::itineraries_router;
 use auth::authorize;
 use auth::login_authorized;
 use auth::protected;
-
 use axum::routing::get;
 use axum::Router;
 use axum_tracing_opentelemetry::middleware::OtelAxumLayer;
@@ -21,14 +20,6 @@ use configuration::Settings;
 use database::connect_database;
 use health_check::*;
 use logging::init_tracer;
-
-
-
-
-
-
-
-
 use sqlx::PgPool;
 use tower::ServiceBuilder;
 use tower_http::cors::Any;

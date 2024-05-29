@@ -1,4 +1,5 @@
 use anyhow::Result;
+use api_core::error_handling::AppError;
 use axum::extract::Path;
 use axum::extract::State;
 use axum::http::StatusCode;
@@ -9,8 +10,6 @@ use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use sqlx::PgPool;
-
-use api_core::error_handling::AppError;
 
 #[tracing::instrument(name = "Create Flight", skip(db))]
 pub async fn create_flight(

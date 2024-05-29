@@ -1,4 +1,5 @@
 mod calendar;
+mod cards;
 mod date_picker;
 mod divider;
 mod flights;
@@ -6,7 +7,6 @@ mod forms;
 mod slide_out;
 mod user_icon;
 mod user_signup;
-mod cards;
 
 pub use calendar::*;
 pub use date_picker::*;

@@ -5,8 +5,6 @@ use sqlx::types::chrono::NaiveDate;
 use sqlx::types::chrono::Utc;
 use sqlx::FromRow;
 
-
-
 #[derive(sqlx::Type, Serialize, Deserialize)]
 #[sqlx(type_name = "itinerary_status", rename_all = "lowercase")]
 pub enum ItineraryStatus {

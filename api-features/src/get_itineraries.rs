@@ -12,7 +12,7 @@ use uuid::Uuid;
 
 #[derive(Serialize, Deserialize)]
 struct IntinerarySummaryView<'a> {
-    id: i32,
+    id: Uuid,
     name: &'a str,
 }
 
@@ -71,7 +71,7 @@ impl GetItineraryRespository for PgPool {
 }
 
 pub struct Itinerary {
-    pub id: i32,
+    pub id: Uuid,
     pub name: String,
     pub user_id: Uuid,
 }
