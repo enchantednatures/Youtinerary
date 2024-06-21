@@ -1,0 +1,28 @@
+[package]
+name = "components"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+leptos = {workspace = true } 
+leptos-use = {workspace = true } 
+leptos_router = {workspace = true } 
+serde = {workspace = true } 
+log = {workspace = true } 
+wasm-bindgen = {workspace = true } 
+console_log = {workspace = true } 
+console_error_panic_hook = {workspace = true } 
+uuid = {workspace = true } 
+leptos_meta = {workspace = true } 
+gloo-net = {workspace = true } 
+tracing-subscriber = {workspace = true } 
+tracing = {workspace = true } 
+serde_json = {workspace = true } 
+chrono-tz = {workspace = true } 
+chrono = {workspace = true } 
+itertools = {workspace = true } 
+
+models = { path = "../models" }
+state= { path = "../state" }

@@ -1,0 +1,16 @@
+[build]
+target = "webapp/index.html"
+dist = "dist"
+
+[clean]
+# The output dir for all final assets.
+dist = "dist"
+cargo = true
+
+[tools]
+tailwindcss = "3.3.5"
+
+[[hooks]]
+stage = "pre_build"
+command = "sh"
+command_arguments = ["-c", "tailwindcss -i webapp/tailwind.css -o webapp/style/main.css --minify"]

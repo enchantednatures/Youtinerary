@@ -1,0 +1,24 @@
+[package]
+name = "api-core"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sqlx = { workspace  = true } 
+tracing = { workspace  = true } 
+anyhow = { workspace  = true } 
+hyper = { workspace  = true } 
+reqwest = { workspace  = true } 
+# axum-extra = { workspace  = true } 
+tower = { workspace  = true } 
+tower-http = { workspace  = true } 
+# headers = { workspace  = true } 
+redis = { workspace  = true } 
+oauth2 = { workspace  = true } 
+axum = { workspace  = true}
+
+models = { path = "../models" }
+api-models = { path = "../api-models" }
+auth = { path = "../auth" }
