@@ -11,6 +11,7 @@ leptos-use = { workspace = true }
 serde = { workspace = true }
 chrono = { workspace = true }
 log = { workspace = true }
+uuid = { workspace = true }
 
 state = { path = "../state" }
 models = { path = "../models" }

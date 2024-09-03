@@ -1,7 +1,9 @@
+#[warn(dead_code)]
+
 mod months;
 mod state;
-#[warn(dead_code)]
 mod trip;
+mod day;
 
 use chrono::Datelike;
 use chrono::NaiveDate;

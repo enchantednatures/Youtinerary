@@ -3,8 +3,8 @@ use leptos::*;
 
 #[derive(Clone, Debug)]
 pub struct CalendarState {
-    current_date: RwSignal<NaiveDate>,
-    view_mode: RwSignal<ViewMode>,
+    pub current_date: RwSignal<NaiveDate>,
+    pub view_mode: RwSignal<ViewMode>,
 }
 
 #[derive(Clone, Debug, PartialEq)]

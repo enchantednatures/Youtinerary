@@ -253,6 +253,7 @@ dependencies = [
  "models",
  "serde",
  "state",
+ "uuid",
 ]
 
 [[package]]

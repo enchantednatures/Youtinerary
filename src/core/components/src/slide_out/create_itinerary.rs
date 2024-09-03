@@ -4,9 +4,8 @@ use leptos::leptos_dom::logging::console_log;
 use leptos::*;
 use state::CreateItineraryRequest;
 use state::GlobalStateSignal;
-use state::STORAGE_KEY;
 
-use crate::date_picker::DatePicker;
+use crate::date_picker::DateRangePicker;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ShowItinerarySignal(RwSignal<bool>);
@@ -244,8 +243,8 @@ fn DateRangeInput(
                 </label>
             </div>
             <div class="sm:col-span-2">
-                <DatePicker
-                    selected_date=selected_date
+                <DateRangePicker
+                    selected_start_date=selected_date
                     selected_end_date=selected_end_date
                 />
             </div>
