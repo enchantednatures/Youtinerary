@@ -240,4 +240,3 @@ impl TravelLeg {
         }
     }
 }
-use uuid::Uuid;

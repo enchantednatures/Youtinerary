@@ -1,4 +1,4 @@
-use chrono::{Date, DateTime, TimeZone};
+use chrono::{DateTime, TimeZone};
 use leptos::*;
 
 pub struct TripCalendarViewModel<Tz: TimeZone> {
