@@ -1,8 +1,0 @@
-auth_settings:
-  token_url: https://auth.enchantednatures.com/application/o/token/
-  auth_url: https://auth.enchantednatures.com/application/o/authorize/
-  introspection_url: https://auth.enchantednatures.com/application/o/userinfo/
-  revocation_url: https://auth.enchantednatures.com/application/o/revoke/
-app_settings:
-  addr: [ 127, 0, 0, 1 ]
-  port: 6969

@@ -1,53 +1,66 @@
 [workspace]
 resolver = "2"
-members = [ "api", "api-core", "api-features", "api-models","auth", "components", "pages", "state", "webapp"]
+members = [ "src/core/*" , "src/webapp"]
 
 [profile.dev]
-opt-level = 1 
+opt-level = 1
+incremental = true
+codegen-units = 256
 split-debuginfo = "unpacked"
+
+[profile.release]
+lto = true
+opt-level = 'z'
+debug = 1
+codegen-units = 16
+
+
+# Caching
+[build]
+rustc-wrapper = "sccache"
 
 [profile.dev.package.sqlx-macros]
 opt-level = 3
 
 [workspace.dependencies]
 leptos = { version = "0.6", features = ["csr", "nightly"] }
-leptos-use = { version = "0.10", features = ["serde", "serde_json" ] }
+leptos-use = { version = "0.13" }
 leptos_router = { version = "0.6", features = ["csr", "nightly"] }
-serde = { version = "1.0", features = ["derive"] }
+leptos_meta = { version = "0.6", features = ["csr", "nightly"] }
+serde = { version = "1", features = ["derive"] }
 log = "0.4"
 wasm-bindgen = { version = "0.2" }
 console_log = { version = "1"}
 console_error_panic_hook = { version = "0.1"}
-uuid = { version = "1.6", features = ["serde", "v4"] }
-leptos_meta = { version = "0.6", features = ["csr", "nightly"] }
-gloo-net = "0.5"
+uuid = { version = "1", features = ["serde", "v4"] }
+gloo-net = "0.6"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing = "0.1.40"
 serde_json = "1.0.108"
-chrono-tz = { version = "0.8.4", features = ["serde"] }
+chrono-tz = { version = "0.9", features = ["serde"] }
 chrono = { version = "0.4", features = ["serde"] }
-itertools = "0.12"
-reqwest = {version = "0.11", features = ["json"]}
+itertools = "0.13"
+reqwest = {version = "0.12", features = ["json"]}
 anyhow = "1.0"
-sqlx = { version = "0.7", features = ["runtime-tokio-native-tls", "postgres",  "chrono", "uuid" ] }
+sqlx = { version = "0.8", features = ["runtime-tokio-native-tls", "postgres",  "chrono", "uuid" ] }
 tokio = {version="1.35", features = ["rt-multi-thread"]}
 hyper = { version = "1", features = ["server"] }
 axum-extra = { version="0.9",  features = ["typed-header"] }
-tower = { version = "0.4", features = ["util"] }
+tower = { version = "0.5", features = ["util"] }
 tower-http = { version = "0.5", features = ["fs", "trace", "cors"] }
 headers = "0.4"
 oauth2 = "4.4"
 async-session = "3.0"
-redis = { version = "0.24", features = ["tokio-comp"] }
+redis = { version = "0.26", features = ["tokio-comp"] }
 config = { version = "0.14", default-features = false, features = ["yaml"] }
-opentelemetry = { version = "0.21", features = ["trace"] }
-opentelemetry-stdout = { version = "0.2", features = ["trace"] }
-axum-tracing-opentelemetry = "0.16.0"
-tracing-opentelemetry = "0.22"
-init-tracing-opentelemetry = { version = "0.16.0", features = [ "otlp", "tracing_subscriber_ext", ] }
-tracing-opentelemetry-instrumentation-sdk =  { version = "0.16.0" }
-opentelemetry_sdk = {version="0.21" , features = ["rt-tokio"] }
-opentelemetry-otlp = { version = "0.14" , features = ["tonic", "default"] }
+opentelemetry = { version = "0.24", features = ["trace"] }
+opentelemetry-stdout = { version = "0.5", features = ["trace"] }
+axum-tracing-opentelemetry = "0.19"
+tracing-opentelemetry = "0.25"
+init-tracing-opentelemetry = { version = "0.20", features = [ "otlp", "tracing_subscriber_ext", ] }
+tracing-opentelemetry-instrumentation-sdk =  { version = "0.19" }
+opentelemetry_sdk = {version="0.24" , features = ["rt-tokio"] }
+opentelemetry-otlp = { version = "0.17" , features = ["tonic", "default"] }
 
 
 [workspace.dependencies.axum]

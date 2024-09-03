@@ -1,6 +1,17 @@
 [build]
-target = "webapp/index.html"
+target = "src/webapp/index.html"
+
 dist = "dist"
+
+release = false
+# The public URL from which assets are to be served.
+public_url = "/"
+# Whether to include hash values in the output file names.
+filehash = true
+# Whether to inject scripts (and module preloads) into the finalized output.
+inject_scripts = true
+# Run without network access
+offline = false
 
 [clean]
 # The output dir for all final assets.
@@ -10,7 +21,7 @@ cargo = true
 [tools]
 tailwindcss = "3.3.5"
 
-[[hooks]]
-stage = "pre_build"
-command = "sh"
-command_arguments = ["-c", "tailwindcss -i webapp/tailwind.css -o webapp/style/main.css --minify"]
+# [[hooks]]
+# stage = "pre_build"
+# command = "sh"
+# command_arguments = ["-c", "tailwindcss -i tailwind.css -o src/webapp/style/main.css --minify"]
