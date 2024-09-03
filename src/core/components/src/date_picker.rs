@@ -30,11 +30,13 @@ pub fn DateTimePicker(selected_date: RwSignal<DateTime<Utc>>) -> impl IntoView {
 pub fn DateRangePicker(
     selected_start_date: RwSignal<NaiveDate>,
     selected_end_date: RwSignal<NaiveDate>,
+    min_date: Option<NaiveDate>,
 ) -> impl IntoView {
     let today = Utc::now().date_naive();
+    let min_allowed_date = min_date.unwrap_or(today);
     let (is_open, set_is_open) = create_signal(false);
-    let (temp_start_date, set_temp_start_date) = create_signal(today);
-    let (temp_end_date, set_temp_end_date) = create_signal(today);
+    let (temp_start_date, set_temp_start_date) = create_signal(selected_start_date.get().max(min_allowed_date));
+    let (temp_end_date, set_temp_end_date) = create_signal(selected_end_date.get().max(min_allowed_date));
 
     let toggle_popout = move |_| set_is_open.update(|value| *value = !*value);
 
@@ -50,8 +52,8 @@ pub fn DateRangePicker(
                 class="w-full px-4 py-2 text-left bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 on:click=toggle_popout
             >
-                {move || format!("{} - {}", 
-                    selected_start_date.get().format("%Y-%m-%d"), 
+                {move || format!("{} - {}",
+                    selected_start_date.get().format("%Y-%m-%d"),
                     selected_end_date.get().format("%Y-%m-%d")
                 )}
             </button>
@@ -68,7 +70,8 @@ pub fn DateRangePicker(
                                     min=today.format("%Y-%m-%d").to_string()
                                     on:input=move |ev| {
                                         if let Ok(date) = NaiveDate::parse_from_str(&event_target_value(&ev), "%Y-%m-%d") {
-                                            set_temp_start_date.set(date);
+                                            let new_start = date.max(min_allowed_date).min(temp_end_date.get());
+                                            set_temp_start_date.set(new_start);
                                         }
                                     }
                                 />
@@ -79,7 +82,8 @@ pub fn DateRangePicker(
                                     min=move || temp_start_date.get().format("%Y-%m-%d").to_string()
                                     on:input=move |ev| {
                                         if let Ok(date) = NaiveDate::parse_from_str(&event_target_value(&ev), "%Y-%m-%d") {
-                                            set_temp_end_date.set(date);
+                                            let new_end = date.max(temp_start_date.get());
+                                            set_temp_end_date.set(new_end);
                                         }
                                     }
                                 />

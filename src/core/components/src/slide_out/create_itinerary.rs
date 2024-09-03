@@ -246,6 +246,7 @@ fn DateRangeInput(
                 <DateRangePicker
                     selected_start_date=selected_date
                     selected_end_date=selected_end_date
+                    min_date=Some(Utc::now().naive_utc().date())
                 />
             </div>
         </div>
